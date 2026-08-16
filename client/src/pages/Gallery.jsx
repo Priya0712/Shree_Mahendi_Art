@@ -1,33 +1,101 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import api from '../services/api';
+import { optimizedUrl } from '../utils/cloudinaryUrl';
+import PageHeader from '../components/common/PageHeader';
+import Lightbox from '../components/gallery/Lightbox';
 
-export default function Gallery() {
+const Gallery = () => {
+  const [categories, setCategories] = useState([]);
+  const [images, setImages] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([api.get('/categories'), api.get('/gallery')])
+      .then(([cat, img]) => {
+        setCategories(cat.data);
+        setImages(img.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error loading gallery page data:', err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  const filtered = activeCategory === 'all'
+    ? images
+    : images.filter((i) => i.category?._id === activeCategory || i.category?.slug === activeCategory);
+
   return (
-    <div className="py-12 px-4 max-w-7xl mx-auto">
-      <h1 className="text-3xl md:text-5xl font-bold text-primary mb-6 text-center">અમારી ગેલેરી</h1>
-      <p className="text-center text-dark-light mb-8">અમારી લેટેસ્ટ ડિઝાઇનો અને વર્ક પોર્ટફોલિયો જુઓ.</p>
-      
-      {/* Category filter placeholder */}
-      <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {['બધા', 'મહેંદી', 'નેઇલ આર્ટ', 'ખાટલી વર્ક', 'વેક્સિંગ'].map((cat, idx) => (
-          <button 
-            key={idx} 
-            className={`px-4 py-1.5 rounded-full font-medium text-sm transition-colors ${
-              idx === 0 ? 'bg-primary text-cream' : 'bg-white border border-primary/20 text-primary hover:bg-primary/5'
-            }`}
-          >
-            {cat}
+    <>
+      <PageHeader title="અમારી ગેલેરી" subtitle="અમારા કામની ઝલક — દરેક ડિઝાઈન અનોખી છે" />
+
+      <div className="sticky top-[57px] z-30 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/20 py-3">
+        <div className="flex gap-2 overflow-x-auto px-4 max-w-6xl mx-auto no-scrollbar">
+          <button onClick={() => setActiveCategory('all')}
+            className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              activeCategory === 'all' ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+            }`}>
+            બધું
           </button>
-        ))}
+          {categories.map((c) => (
+            <button key={c._id} onClick={() => setActiveCategory(c._id)}
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                activeCategory === c._id ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+              }`}>
+              {c.nameGujarati}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {/* Placeholder images grid */}
-        {[1, 2, 3, 4, 5, 6].map((num) => (
-          <div key={num} className="aspect-square bg-white border border-primary/10 rounded-xl overflow-hidden shadow-sm flex items-center justify-center text-primary/40 font-bold">
-            ફોટો {num}
+      <section className="max-w-6xl mx-auto px-4 py-8">
+        {loading ? (
+          <GallerySkeleton />
+        ) : filtered.length === 0 ? (
+          <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ ફોટો ઉપલબ્ધ નથી.</p>
+        ) : (
+          <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
+            {filtered.map((img, idx) => (
+              <button
+                key={img._id}
+                onClick={() => setLightboxIndex(idx)}
+                className="mb-3 w-full block rounded-xl overflow-hidden active:scale-95 transition break-inside-avoid focus:outline-none"
+              >
+                {img.image?.url && (
+                  <img
+                    src={optimizedUrl(img.image.url, 500)}
+                    alt={img.captionGujarati || 'મહેંદી ડિઝાઈન'}
+                    className="w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                )}
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        )}
+      </section>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={filtered}
+          currentIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
+        />
+      )}
+    </>
   );
-}
+};
+
+const GallerySkeleton = () => (
+  <div className="columns-2 sm:columns-3 lg:columns-4 gap-3">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <div key={i} className="mb-3 h-40 bg-[#EFE3D3] rounded-xl animate-pulse break-inside-avoid" />
+    ))}
+  </div>
+);
+
+export default Gallery;

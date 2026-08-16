@@ -1,34 +1,60 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import api from '../services/api';
+import PageHeader from '../components/common/PageHeader';
+import { Star, MessageCircle } from 'lucide-react';
 
-export default function Testimonials() {
-  const reviews = [
-    { name: 'પ્રિયા પટેલ', rating: 5, text: 'ખૂબ જ સરસ બ્રાઇડલ મહેંદી ડિઝાઇન બનાવી આપી! બધાને બહુ જ ગમી.' },
-    { name: 'અંજલી શાહ', rating: 5, text: 'નેઇલ આર્ટ માટે બેસ્ટ જગ્યા છે. ફિનિશિંગ ખૂબ જ સરસ છે.' },
-    { name: 'કોમલ મહેતા', rating: 5, text: 'હોમ સર્વિસ પણ ખૂબ જ ટાઈમસર અને વ્યવસ્થિત હતી. થેન્ક યુ!' }
-  ];
+const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get('/testimonials')
+      .then((res) => {
+        setTestimonials(res.data.filter((t) => t.isApproved));
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching testimonials:', err.message);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div className="py-12 px-4 max-w-4xl mx-auto">
-      <h1 className="text-3xl md:text-5xl font-bold text-primary mb-6 text-center">ગ્રાહકોના અભિપ્રાયો</h1>
-      <p className="text-center text-dark-light mb-8">અમારા ખુશ ગ્રાહકો તરફથી મળેલ સુંદર સમીક્ષાઓ.</p>
+    <>
+      <PageHeader title="ગ્રાહકોના અભિપ્રાય" subtitle="અમારા ગ્રાહકો શું કહે છે તે વાંચો" />
 
-      <div className="space-y-6">
-        {reviews.map((rev, idx) => (
-          <div key={idx} className="ornate-card bg-white flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-            <div>
-              <div className="flex text-amber-500 mb-2">
-                {Array(rev.rating).fill().map((_, i) => (
-                  <span key={i} className="text-lg">★</span>
-                ))}
+      <section className="max-w-4xl mx-auto px-4 py-10">
+        {loading ? (
+          <p className="text-center text-[#4A2E22]">લોડ થઈ રહ્યું છે...</p>
+        ) : testimonials.length === 0 ? (
+          <p className="text-center text-[#4A2E22]">હજુ સુધી કોઈ સમીક્ષા ઉપલબ્ધ નથી.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {testimonials.map((t) => (
+              <div key={t._id} className="bg-white rounded-2xl shadow-sm p-5 border border-[#D4AF37]/10">
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                    <Star key={i} size={16} className="fill-[#D4AF37] text-[#D4AF37]" />
+                  ))}
+                </div>
+                <p className="text-sm text-[#4A2E22] mb-4 leading-relaxed">"{t.messageGujarati}"</p>
+                <p className="text-sm font-semibold text-[#6B2E1F]">— {t.customerName}</p>
               </div>
-              <p className="italic text-lg text-dark-light">&ldquo;{rev.text}&rdquo;</p>
-            </div>
-            <span className="font-bold text-primary text-sm whitespace-nowrap bg-primary/5 px-3 py-1 rounded-full">
-              - {rev.name}
-            </span>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        )}
+
+        <div className="text-center mt-10 bg-[#FFF3E0] rounded-2xl p-6">
+          <p className="text-[#6B2E1F] font-medium mb-3">તમે પણ અમારી સેવાનો અનુભવ કર્યો છે?</p>
+          <a href="https://wa.me/918799008221?text=નમસ્તે,%20મારે%20મારો%20અનુભવ%20શેર%20કરવો%20છે"
+            target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#20ba59] transition">
+            <MessageCircle size={16} /> તમારો અભિપ્રાય મોકલો
+          </a>
+        </div>
+      </section>
+    </>
   );
-}
+};
+
+export default Testimonials;
