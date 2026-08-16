@@ -5,6 +5,7 @@ import PageHeader from '../components/common/PageHeader';
 import Lightbox from '../components/gallery/Lightbox';
 import SEO from '../components/common/SEO';
 import QuickBookBar from '../components/common/QuickBookBar';
+import FadeInSection from '../components/common/FadeInSection';
 
 const Gallery = () => {
   const [categories, setCategories] = useState([]);
@@ -54,13 +55,14 @@ const Gallery = () => {
         </div>
       </div>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        {loading ? (
-          <GallerySkeleton />
-        ) : filtered.length === 0 ? (
-          <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ ફોટો ઉપલબ્ધ નથી.</p>
-        ) : (
-          <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
+      <FadeInSection>
+        <section className="max-w-6xl mx-auto px-4 py-8">
+          {loading ? (
+            <GallerySkeleton />
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ ફોટો ઉપલબ્ધ નથી.</p>
+          ) : (
+            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
             {filtered.map((img, idx) => (
               <button
                 key={img._id}
@@ -79,7 +81,8 @@ const Gallery = () => {
             ))}
           </div>
         )}
-      </section>
+        </section>
+      </FadeInSection>
 
       {lightboxIndex !== null && (
         <Lightbox

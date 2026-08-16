@@ -6,6 +6,7 @@ import ServiceDetailModal from '../components/services/ServiceDetailModal';
 import ConesSection from '../components/services/ConesSection';
 import SEO from '../components/common/SEO';
 import QuickBookBar from '../components/common/QuickBookBar';
+import FadeInSection from '../components/common/FadeInSection';
 
 const Services = () => {
   const [categories, setCategories] = useState([]);
@@ -76,40 +77,44 @@ const Services = () => {
         </div>
       </div>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        {loading ? (
-          <ServiceGridSkeleton />
-        ) : filtered.length === 0 ? (
-          <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ સેવા ઉપલબ્ધ નથી.</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {filtered.map((s) => (
-              <button
-                key={s._id}
-                id={s._id}
-                onClick={() => setSelectedService(s)}
-                className="text-left bg-white rounded-2xl overflow-hidden shadow-sm active:scale-95 transition focus:outline-none"
-              >
-                <div className="h-32 sm:h-40 overflow-hidden">
-                  {s.image?.url && (
-                    <img src={optimizedUrl(s.image.url, 400)} alt={s.titleGujarati}
-                      className="w-full h-full object-cover" loading="lazy" />
-                  )}
-                </div>
-                <div className="p-3">
-                  <p className="font-semibold text-sm text-[#2B1810] truncate">{s.titleGujarati}</p>
-                  {s.titleEnglish && <p className="text-[11px] text-[#8B6F5E]">{s.titleEnglish}</p>}
-                  {s.priceNote && <p className="text-xs text-[#C1662F] mt-1 font-medium">{s.priceNote}</p>}
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </section>
+      <FadeInSection>
+        <section className="max-w-6xl mx-auto px-4 py-8">
+          {loading ? (
+            <ServiceGridSkeleton />
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ સેવા ઉપલબ્ધ નથી.</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {filtered.map((s) => (
+                <button
+                  key={s._id}
+                  id={s._id}
+                  onClick={() => setSelectedService(s)}
+                  className="text-left bg-white rounded-2xl overflow-hidden shadow-sm active:scale-95 transition focus:outline-none"
+                >
+                  <div className="h-32 sm:h-40 overflow-hidden">
+                    {s.image?.url && (
+                      <img src={optimizedUrl(s.image.url, 400)} alt={s.titleGujarati}
+                        className="w-full h-full object-cover" loading="lazy" />
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="font-semibold text-sm text-[#2B1810] truncate">{s.titleGujarati}</p>
+                    {s.titleEnglish && <p className="text-[11px] text-[#8B6F5E]">{s.titleEnglish}</p>}
+                    {s.priceNote && <p className="text-xs text-[#C1662F] mt-1 font-medium">{s.priceNote}</p>}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
+      </FadeInSection>
 
       {/* Mehendi Cones dedicated section */}
       {!loading && conesServices.length > 0 && (
-        <ConesSection cones={conesServices} />
+        <FadeInSection>
+          <ConesSection cones={conesServices} />
+        </FadeInSection>
       )}
 
       {selectedService && (
