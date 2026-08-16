@@ -17,7 +17,10 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0 md:flex">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex md:flex-col w-60 bg-white border-r p-4">
-        <h2 className="font-bold text-[#6B2E1F] text-lg mb-6">Shree Mahendi</h2>
+        <div className="flex items-center gap-2 mb-6">
+          <img src="/images/logo.jpg" alt="Shree Mahendi" className="h-8 w-8 rounded-full object-cover border border-[#D4AF37]" />
+          <h2 className="font-bold text-[#6B2E1F] text-lg">Shree Mahendi</h2>
+        </div>
         {navItems.map(({ to, label, icon: Icon }) => (
           <NavLink key={to} to={to} className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-sm font-medium ${isActive ? 'bg-[#6B2E1F] text-white' : 'text-gray-600 hover:bg-gray-100'}`}>

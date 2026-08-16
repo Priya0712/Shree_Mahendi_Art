@@ -1,29 +1,133 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import api from '../services/api';
+import { optimizedUrl } from '../utils/cloudinaryUrl';
+import PageHeader from '../components/common/PageHeader';
+import ServiceDetailModal from '../components/services/ServiceDetailModal';
+import ConesSection from '../components/services/ConesSection';
 
-export default function Services() {
-  const servicesList = [
-    { title: 'બ્રાઇડલ મહેંદી (Bridal Mehendi)', desc: 'લગ્ન પ્રસંગ માટે ખાસ ટ્રેડિશનલ અને મોર્ડન હેન્ડક્રાફ્ટ ડિઝાઇન.' },
-    { title: 'નેઇલ આર્ટ (Nail Art)', desc: 'તમારા નખની સુંદરતા વધારવા માટે ટ્રેન્ડી અને કસ્ટમ આર્ટ ડિઝાઇન.' },
-    { title: 'ખાટલી વર્ક (Khatli Work)', desc: 'મોતી, કાચ અને દોરાની પરંપરાગત સુંદર હસ્તકલા.' },
-    { title: 'વેક્સિંગ સેવાઓ (Waxing Services)', desc: 'હાઇજીનિક અને સેફ સ્કીન કેર વેક્સિંગ.' },
-    { title: 'મહેંદી કોન (Mehendi Cones)', desc: '૧૦૦% નેચરલ, ઓર્ગેનિક અને ડાર્ક કલર આપતા હોમમેઇડ કોન.' }
-  ];
+const Services = () => {
+  const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedService, setSelectedService] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([api.get('/categories'), api.get('/services')])
+      .then(([cat, svc]) => {
+        setCategories(cat.data);
+        setServices(svc.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching services page data:', err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  const isConeCategory = (c) => {
+    return c?.nameEnglish?.toLowerCase().includes('cone') ||
+           c?.nameGujarati?.includes('કોન') ||
+           c?.slug?.toLowerCase().includes('cone');
+  };
+
+  const regularServices = services.filter((s) => !isConeCategory(s.category));
+  const conesServices = services.filter((s) => isConeCategory(s.category));
+
+  // Filter categories to show only non-cone categories in main filters
+  const regularCategories = categories.filter((c) => !isConeCategory(c));
+
+  const filtered = activeCategory === 'all'
+    ? regularServices
+    : regularServices.filter((s) => s.category?._id === activeCategory || s.category?.slug === activeCategory);
 
   return (
-    <div className="py-12 px-4 max-w-7xl mx-auto">
-      <h1 className="text-3xl md:text-5xl font-bold text-primary mb-8 text-center">અમારી સેવાઓ</h1>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {servicesList.map((service, index) => (
-          <div key={index} className="ornate-card bg-white">
-            <h3 className="text-xl font-bold text-primary mb-2">{service.title}</h3>
-            <p className="text-dark-light">{service.desc}</p>
-            <div className="mt-4 flex justify-between items-center">
-              <span className="text-sm font-semibold text-secondary">પ્રીમિયમ ક્વોલિટી</span>
-              <button className="text-accent-dark hover:text-accent font-bold">વિગતો જુઓ &rarr;</button>
-            </div>
-          </div>
-        ))}
+    <>
+      <PageHeader
+        title="અમારી સેવાઓ"
+        subtitle="બ્રાઇડલ મહેંદીથી લઈને નેઇલ આર્ટ સુધી — દરેક પ્રસંગ માટે"
+      />
+
+      {/* Sticky category chip bar */}
+      <div className="sticky top-[57px] z-30 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/20 py-3">
+        <div className="flex gap-2 overflow-x-auto px-4 max-w-6xl mx-auto no-scrollbar">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              activeCategory === 'all' ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+            }`}
+          >
+            બધું
+          </button>
+          {regularCategories.map((c) => (
+            <button
+              key={c._id}
+              onClick={() => setActiveCategory(c._id)}
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                activeCategory === c._id ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+              }`}
+            >
+              {c.nameGujarati}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+
+      <section className="max-w-6xl mx-auto px-4 py-8">
+        {loading ? (
+          <ServiceGridSkeleton />
+        ) : filtered.length === 0 ? (
+          <p className="text-center text-[#4A2E22] py-12">આ કેટેગરીમાં હાલમાં કોઈ સેવા ઉપલબ્ધ નથી.</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {filtered.map((s) => (
+              <button
+                key={s._id}
+                id={s._id}
+                onClick={() => setSelectedService(s)}
+                className="text-left bg-white rounded-2xl overflow-hidden shadow-sm active:scale-95 transition focus:outline-none"
+              >
+                <div className="h-32 sm:h-40 overflow-hidden">
+                  {s.image?.url && (
+                    <img src={optimizedUrl(s.image.url, 400)} alt={s.titleGujarati}
+                      className="w-full h-full object-cover" loading="lazy" />
+                  )}
+                </div>
+                <div className="p-3">
+                  <p className="font-semibold text-sm text-[#2B1810] truncate">{s.titleGujarati}</p>
+                  {s.titleEnglish && <p className="text-[11px] text-[#8B6F5E]">{s.titleEnglish}</p>}
+                  {s.priceNote && <p className="text-xs text-[#C1662F] mt-1 font-medium">{s.priceNote}</p>}
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Mehendi Cones dedicated section */}
+      {!loading && conesServices.length > 0 && (
+        <ConesSection cones={conesServices} />
+      )}
+
+      {selectedService && (
+        <ServiceDetailModal service={selectedService} onClose={() => setSelectedService(null)} />
+      )}
+    </>
   );
-}
+};
+
+const ServiceGridSkeleton = () => (
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    {Array.from({ length: 6 }).map((_, i) => (
+      <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse">
+        <div className="h-32 sm:h-40 bg-[#EFE3D3]" />
+        <div className="p-3 space-y-2">
+          <div className="h-3 bg-[#EFE3D3] rounded w-3/4" />
+          <div className="h-3 bg-[#EFE3D3] rounded w-1/2" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+export default Services;

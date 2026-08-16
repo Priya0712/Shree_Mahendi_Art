@@ -27,8 +27,11 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FFF8F0] px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-        <h1 className="text-2xl font-bold text-center text-[#6B2E1F] mb-1">Shree Mahendi</h1>
-        <p className="text-center text-sm text-gray-500 mb-6">Admin Panel</p>
+        <div className="flex flex-col items-center mb-6">
+          <img src="/images/logo.jpg" alt="Shree Mahendi" className="h-16 w-16 rounded-full object-cover border-2 border-[#D4AF37] mb-2" />
+          <h1 className="text-2xl font-bold text-center text-[#6B2E1F] mb-1">Shree Mahendi</h1>
+          <p className="text-center text-sm text-gray-500">Admin Panel</p>
+        </div>
         {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
         <input
           type="text" placeholder="Username" value={username}

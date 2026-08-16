@@ -17,7 +17,10 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/30">
       <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
-        <Link to="/" className="text-xl font-bold text-[#6B2E1F]">શ્રી મહેંદી</Link>
+        <Link to="/" className="flex items-center gap-2">
+          <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]" />
+          <span className="text-xl font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
+        </Link>
 
         <nav className="hidden md:flex gap-6">
           {navLinks.map((l) => (
@@ -39,7 +42,10 @@ const Navbar = () => {
           <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-0 h-full w-72 bg-[#FFF8F0] shadow-xl p-6 flex flex-col">
             <div className="flex justify-between items-center mb-8">
-              <span className="text-lg font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
+              <div className="flex items-center gap-2">
+                <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-9 w-9 rounded-full object-cover border border-[#D4AF37]" />
+                <span className="text-lg font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
+              </div>
               <button onClick={() => setOpen(false)} aria-label="બંધ કરો"><X size={24} /></button>
             </div>
             {navLinks.map((l) => (

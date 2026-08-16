@@ -3,8 +3,11 @@ import { Instagram, MessageCircle } from 'lucide-react';
 const Footer = () => (
   <footer className="bg-[#2B1810] text-[#FFF8F0] pt-10 pb-24 md:pb-10 px-4">
     <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
-      <div>
-        <h3 className="text-xl font-bold text-[#D4AF37] mb-2">શ્રી મહેંદી</h3>
+      <div className="flex flex-col items-center sm:items-start">
+        <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
+          <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]" />
+          <h3 className="text-xl font-bold text-[#D4AF37]">શ્રી મહેંદી</h3>
+        </div>
         <p className="text-sm text-[#D9C4B0]">બ્રાઇડલ મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક નિષ્ણાત</p>
       </div>
 
