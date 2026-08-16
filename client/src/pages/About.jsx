@@ -1,5 +1,6 @@
 import PageHeader from '../components/common/PageHeader';
 import { Instagram, MessageCircle, Award, Heart, Sparkles } from 'lucide-react';
+import SEO from '../components/common/SEO';
 
 const highlights = [
   { icon: Award, title: '૫+ વર્ષનો અનુભવ', desc: 'બ્રાઇડલ અને પાર્ટી મહેંદીમાં નિપુણતા' },
@@ -9,6 +10,7 @@ const highlights = [
 
 const About = () => (
   <>
+    <SEO title="અમારા વિશે" description="શ્રી મહેંદી પાછળની વાર્તા - ૫+ વર્ષનો અનુભવ, બ્રાઇડલ અને પાર્ટી મહેંદીમાં નિપુણતા." />
     <PageHeader title="અમારા વિશે" subtitle="શ્રી મહેંદી પાછળની વાર્તા" />
 
     <section className="max-w-4xl mx-auto px-4 py-10">

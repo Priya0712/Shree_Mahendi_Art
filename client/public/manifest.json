@@ -1,0 +1,13 @@
+{
+  "name": "શ્રી મહેંદી",
+  "short_name": "શ્રી મહેંદી",
+  "description": "બ્રાઇડલ મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#6B2E1F",
+  "icons": [
+    { "src": "/images/logo.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "/images/logo.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}

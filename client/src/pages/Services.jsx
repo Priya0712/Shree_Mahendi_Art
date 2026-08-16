@@ -4,6 +4,8 @@ import { optimizedUrl } from '../utils/cloudinaryUrl';
 import PageHeader from '../components/common/PageHeader';
 import ServiceDetailModal from '../components/services/ServiceDetailModal';
 import ConesSection from '../components/services/ConesSection';
+import SEO from '../components/common/SEO';
+import QuickBookBar from '../components/common/QuickBookBar';
 
 const Services = () => {
   const [categories, setCategories] = useState([]);
@@ -43,6 +45,7 @@ const Services = () => {
 
   return (
     <>
+      <SEO title="અમારી સેવાઓ" description="બ્રાઇડલ મહેંદી, આર્બિક મહેંદી, નેઇલ આર્ટ અને વધુ - બધી સેવાઓ એક જ જગ્યાએ." />
       <PageHeader
         title="અમારી સેવાઓ"
         subtitle="બ્રાઇડલ મહેંદીથી લઈને નેઇલ આર્ટ સુધી — દરેક પ્રસંગ માટે"
@@ -112,6 +115,7 @@ const Services = () => {
       {selectedService && (
         <ServiceDetailModal service={selectedService} onClose={() => setSelectedService(null)} />
       )}
+      <QuickBookBar />
     </>
   );
 };

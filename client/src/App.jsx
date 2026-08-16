@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import WhatsAppFloat from './components/common/WhatsAppFloat';
 import { AuthProvider } from './context/AuthContext';
+import SplashScreen from './components/common/SplashScreen';
 
 // Public Pages
 import Home from './pages/Home';
@@ -27,6 +29,14 @@ import ProtectedRoute from './components/admin/ProtectedRoute';
 function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAppReady(true), 600);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!appReady) return <SplashScreen />;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -64,10 +74,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }

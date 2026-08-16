@@ -3,6 +3,8 @@ import api from '../services/api';
 import { optimizedUrl } from '../utils/cloudinaryUrl';
 import PageHeader from '../components/common/PageHeader';
 import Lightbox from '../components/gallery/Lightbox';
+import SEO from '../components/common/SEO';
+import QuickBookBar from '../components/common/QuickBookBar';
 
 const Gallery = () => {
   const [categories, setCategories] = useState([]);
@@ -30,6 +32,7 @@ const Gallery = () => {
 
   return (
     <>
+      <SEO title="ગેલેરી" description="અમારા મહેંદી અને નેઇલ આર્ટ ડિઝાઈનની ફોટો ગેલેરી જુઓ." />
       <PageHeader title="અમારી ગેલેરી" subtitle="અમારા કામની ઝલક — દરેક ડિઝાઈન અનોખી છે" />
 
       <div className="sticky top-[57px] z-30 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/20 py-3">
@@ -86,6 +89,7 @@ const Gallery = () => {
           onNavigate={setLightboxIndex}
         />
       )}
+      <QuickBookBar />
     </>
   );
 };
