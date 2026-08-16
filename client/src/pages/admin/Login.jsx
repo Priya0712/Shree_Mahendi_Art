@@ -10,7 +10,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const adminPath = import.meta.env.VITE_ADMIN_PATH || '/admin';
+  const adminPath = import.meta.env.VITE_ADMIN_PATH || '/secure-yk-admin';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +19,10 @@ const Login = () => {
     try {
       await login(username, password);
       localStorage.setItem('admin_username', username);
-      navigate(`${adminPath}/dashboard`);
+      navigate('/secure-yk-admin/dashboard');
     } catch (err) {
-      setError('Invalid username or password');
+      console.error('Login error details:', err);
+      setError(err.response?.data?.message || 'Invalid username or password');
     } finally {
       setLoading(false);
     }

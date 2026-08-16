@@ -15,7 +15,8 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('adminToken');
-      window.location.href = '/admin/login';
+      const adminLogin = (import.meta.env.VITE_ADMIN_PATH || '/secure-yk-admin') + '/login';
+      window.location.href = adminLogin;
     }
     return Promise.reject(err);
   }

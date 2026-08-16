@@ -6,19 +6,22 @@ export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  
+  const adminPath = import.meta.env.VITE_ADMIN_PATH || '/secure-yk-admin';
 
   const menuItems = [
-    { name: 'ડેશબોર્ડ', path: '/admin/dashboard' },
-    { name: 'ગેલેરી', path: '/admin/gallery' },
-    { name: 'કેટેગરી', path: '/admin/categories' },
-    { name: 'સેવાઓ', path: '/admin/services' },
-    { name: 'સમીક્ષાઓ', path: '/admin/testimonials' },
-    { name: 'પૂછપરછ લિસ્ટ', path: '/admin/inquiries' }
+    { name: 'ડેશબોર્ડ', path: `${adminPath}/dashboard` },
+    { name: 'ગેલેરી', path: `${adminPath}/gallery` },
+    { name: 'કેટેગરી', path: `${adminPath}/categories` },
+    { name: 'સેવાઓ', path: `${adminPath}/services` },
+    { name: 'સમીક્ષાઓ', path: `${adminPath}/testimonials` },
+    { name: 'પૂછપરછ લિસ્ટ', path: `${adminPath}/inquiries` },
+    { name: 'વેબસાઇટ સેટિંગ્સ', path: `${adminPath}/settings` },
   ];
 
   const handleLogout = () => {
     logout();
-    navigate('/admin');
+    navigate(`${adminPath}/login`);
   };
 
   return (
