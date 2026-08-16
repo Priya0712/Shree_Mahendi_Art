@@ -6,6 +6,7 @@ const inquirySchema = new mongoose.Schema({
   serviceInterested: { type: String },
   eventDate: { type: Date },
   message: { type: String },
+  peopleCount: { type: String },
   status: { type: String, enum: ['new', 'contacted', 'closed'], default: 'new' },
 }, { timestamps: true });
 

@@ -36,8 +36,10 @@ const Inquiries = () => {
               <div>
                 <p className="font-medium">{i.name}</p>
                 <p className="text-sm text-gray-500">{i.phone}</p>
-                {i.serviceInterested && <p className="text-sm text-gray-600 mt-1">{i.serviceInterested}</p>}
-                {i.message && <p className="text-sm text-gray-600 mt-1">{i.message}</p>}
+                {i.serviceInterested && <p className="text-sm text-gray-600 mt-1"><strong>સેવા:</strong> {i.serviceInterested}</p>}
+                {i.peopleCount && <p className="text-sm text-gray-600 mt-1"><strong>લોકો:</strong> {i.peopleCount}</p>}
+                {i.eventDate && <p className="text-sm text-gray-600 mt-1"><strong>તારીખ:</strong> {new Date(i.eventDate).toLocaleDateString('gu-IN')}</p>}
+                {i.message && <p className="text-sm text-gray-600 mt-1"><strong>સંદેશો:</strong> {i.message}</p>}
               </div>
               <select value={i.status} onChange={(e) => updateStatus(i._id, e.target.value)}
                 className={`text-xs px-2 py-1 rounded-full border-none ${statusColors[i.status] || ''}`}>

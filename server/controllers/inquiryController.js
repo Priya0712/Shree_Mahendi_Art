@@ -1,7 +1,7 @@
 const Inquiry = require('../models/Inquiry');
 
 exports.submitInquiry = async (req, res) => {
-  const { name, phone, serviceInterested, eventDate, message } = req.body;
+  const { name, phone, serviceInterested, eventDate, message, peopleCount } = req.body;
   try {
     if (!name || !phone) {
       return res.status(400).json({ message: 'Name and phone number are required' });
@@ -13,6 +13,7 @@ exports.submitInquiry = async (req, res) => {
       serviceInterested,
       eventDate: eventDate ? new Date(eventDate) : undefined,
       message,
+      peopleCount,
       status: 'new'
     });
 
