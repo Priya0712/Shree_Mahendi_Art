@@ -9,66 +9,50 @@ REQUIRED_ENV.forEach((key) => {
   }
 });
 
-// Seed or sync admin credentials from env on server start
+// Seed or reset admin credentials from env on server start
 exports.seedDefaultAdmin = async () => {
   try {
-    const defaultUsername = process.env.ADMIN_USERNAME;
-    const defaultPassword = process.env.ADMIN_PASSWORD;
+    const defaultUsername = (process.env.ADMIN_USERNAME || 'admin').trim();
+    const defaultPassword = (process.env.ADMIN_PASSWORD || 'admin123').trim();
 
-    if (!defaultUsername || !defaultPassword) {
-      console.error('❌ Cannot seed/sync admin: ADMIN_USERNAME or ADMIN_PASSWORD is not set in environment');
-      return;
-    }
+    // Wipe any existing stale admin docs and recreate fresh admin account
+    await Admin.deleteMany({});
+    
+    const newAdmin = new Admin({ username: defaultUsername, password: defaultPassword });
+    await newAdmin.save();
 
-    let admin = await Admin.findOne();
-    if (!admin) {
-      admin = new Admin({ username: defaultUsername, password: defaultPassword });
-      await admin.save();
-      console.log('--------------------------------------------------');
-      console.log('✅ Default admin account created from environment');
-      console.log(`   Username: ${defaultUsername}`);
-      console.log('--------------------------------------------------');
-    } else {
-      // Sync credentials with env if changed
-      let modified = false;
-      if (admin.username !== defaultUsername) {
-        admin.username = defaultUsername;
-        modified = true;
-      }
-      const isPassMatch = await admin.comparePassword(defaultPassword);
-      if (!isPassMatch) {
-        admin.password = defaultPassword; // Pre-save hook will hash it
-        modified = true;
-      }
-      if (modified) {
-        await admin.save();
-        console.log('--------------------------------------------------');
-        console.log('🔄 Admin credentials updated to match environment');
-        console.log(`   Username: ${defaultUsername}`);
-        console.log('--------------------------------------------------');
-      }
-    }
+    console.log('--------------------------------------------------');
+    console.log('✅ Fresh Admin account ready from environment settings');
+    console.log(`   Username: ${defaultUsername}`);
+    console.log('--------------------------------------------------');
   } catch (error) {
-    console.error('Failed to seed/sync admin:', error.message);
+    console.error('Failed to seed default admin:', error.message);
   }
 };
 
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
+  let { username, password } = req.body;
 
   try {
     if (!username || !password) {
       return res.status(400).json({ message: 'Username and password are required' });
     }
 
-    const admin = await Admin.findOne({ username });
+    username = username.trim();
+    password = password.trim();
+
+    // Case-insensitive username lookup
+    const admin = await Admin.findOne({
+      username: { $regex: new RegExp(`^${username}$`, 'i') }
+    });
+
     if (!admin) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials — user not found' });
     }
 
     const isMatch = await admin.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials — password mismatch' });
     }
 
     if (!process.env.JWT_SECRET) {
@@ -105,8 +89,8 @@ exports.updateCredentials = async (req, res) => {
       return res.status(404).json({ message: 'Admin not found' });
     }
 
-    admin.username = username;
-    admin.password = password;
+    admin.username = username.trim();
+    admin.password = password.trim();
     await admin.save();
 
     res.json({
@@ -118,4 +102,3 @@ exports.updateCredentials = async (req, res) => {
     res.status(500).json({ message: 'Server error updating credentials', error: error.message });
   }
 };
-
