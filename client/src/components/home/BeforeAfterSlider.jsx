@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react';
 
-// Props:
-//   mehendiImg  = the mehendi photo (shown on LEFT, slides away)
-//   plainImg    = the plain/empty hand (shown on RIGHT, revealed)
+// mehendiImg = left side (full, no crop)
+// plainImg   = right side (plain hand)
 const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
   const [position, setPosition] = useState(50);
   const containerRef = useRef(null);
@@ -11,8 +10,8 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
   const handleMove = (clientX) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const percent = ((clientX - rect.left) / rect.width) * 100;
-    setPosition(Math.min(100, Math.max(0, percent)));
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    setPosition(Math.min(100, Math.max(0, pct)));
   };
 
   return (
@@ -24,9 +23,14 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
         </p>
       </div>
 
+      {/*
+        The container uses a tall aspect ratio (3:4) to naturally fit the portrait
+        mehendi photo. Both images use object-contain so NOTHING is cropped.
+      */}
       <div
         ref={containerRef}
-        className="relative w-full aspect-[4/3] sm:aspect-video rounded-3xl overflow-hidden select-none touch-none shadow-lg cursor-ew-resize"
+        className="relative w-full rounded-3xl overflow-hidden select-none touch-none shadow-xl bg-[#FFF8F0] cursor-ew-resize"
+        style={{ aspectRatio: '3 / 4' }}
         onMouseDown={() => { isDragging.current = true; }}
         onMouseUp={() => { isDragging.current = false; }}
         onMouseLeave={() => { isDragging.current = false; }}
@@ -35,54 +39,51 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
         onTouchEnd={() => { isDragging.current = false; }}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
       >
-        {/* RIGHT base — plain empty hand (always full width behind) */}
+        {/* RIGHT base: plain empty hand — full, no crop */}
         <img
           src={plainImg}
           alt="ખાલી હાથ"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-contain"
         />
 
-        {/* LEFT overlay — mehendi photo (clipped to left of slider) */}
+        {/* LEFT overlay: full mehendi photo clipped to slider position */}
         <div
           className="absolute inset-0 overflow-hidden"
           style={{ width: `${position}%` }}
         >
           <img
             src={mehendiImg}
-            alt="મહેંદી"
-            className="h-full object-cover"
-            style={{ width: containerRef.current?.offsetWidth || '100%' }}
+            alt="બ્રાઇડલ મહેંદી"
+            className="absolute inset-0 h-full object-contain bg-[#FFF8F0]"
+            style={{ width: containerRef.current?.offsetWidth ?? '100%' }}
           />
         </div>
 
-        {/* Divider line + handle */}
+        {/* Divider + handle */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white shadow-lg"
+          className="absolute top-0 bottom-0 w-[2px] bg-white/80 shadow-lg pointer-events-none"
           style={{ left: `${position}%` }}
         >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center text-[#6B2E1F] font-bold text-sm select-none pointer-events-none border-2 border-[#D4AF37]/30">
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 bg-white rounded-full shadow-xl flex items-center justify-center text-[#6B2E1F] font-bold text-sm border-2 border-[#D4AF37]/40">
             ⇔
           </div>
         </div>
 
-        {/* Labels */}
-        <span className="absolute bottom-3 left-3 bg-[#6B2E1F]/80 text-white text-xs px-3 py-1 rounded-full font-semibold">
+        {/* Corner labels */}
+        <span className="absolute bottom-3 left-3 bg-[#6B2E1F]/80 text-white text-xs px-3 py-1 rounded-full font-semibold pointer-events-none">
           🌿 મહેંદી
         </span>
-        <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1 rounded-full font-semibold">
+        <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1 rounded-full font-semibold pointer-events-none">
           ✋ ખાલી હાથ
         </span>
       </div>
 
-      {/* Range slider for accessibility & mobile */}
+      {/* Range slider — accessible and mobile-friendly */}
       <input
-        type="range"
-        min="0"
-        max="100"
-        value={position}
+        type="range" min="0" max="100" value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
         className="w-full mt-4 accent-[#6B2E1F]"
-        aria-label="મહેંદી અને ખાલી હાથ સ્લાઈડર"
+        aria-label="સ્લાઈડ કરો"
       />
     </section>
   );
