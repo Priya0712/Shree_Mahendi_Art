@@ -6,7 +6,7 @@ const Hero = () => (
     <div className="relative max-w-6xl mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row items-center gap-8">
       <div className="flex-1 text-center md:text-left">
         <span className="inline-block text-xs tracking-wide bg-[#D4AF37]/20 text-[#8B3A2A] px-3 py-1 rounded-full mb-4 font-medium">
-          ✨ બ્રાઇડલ • પાર્ટી • આર્બિક મહેંદી
+          ✨ બ્રાઇડલ • પાર્ટી • સાઇડર મહેંદી
         </span>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#6B2E1F] leading-tight mb-4">
           તમારા ખાસ પ્રસંગને <br className="hidden sm:block" />

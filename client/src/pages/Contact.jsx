@@ -4,7 +4,7 @@ import { Instagram, Phone, CheckCircle2 } from 'lucide-react';
 import FadeInSection from '../components/common/FadeInSection';
 
 const servicesList = [
-  'બ્રાઇડલ મહેંદી', 'પાર્ટી મહેંદી', 'આર્બિક મહેંદી', 'દરેક પ્રકારની મહેંદી', 'નેઇલ આર્ટ', 'વેક્સિંગ', 'ખાટલી વર્ક', 'મહેંદી કોન', 'બીજું',
+  'બ્રાઇડલ મહેંદી', 'પાર્ટી મહેંદી', 'સાઇડર મહેંદી', 'દરેક પ્રકારની મહેંદી', 'નેઇલ આર્ટ', 'વેક્સિંગ', 'ખાટલી વર્ક', 'મહેંદી કોન', 'બીજું',
 ];
 
 const Contact = () => {

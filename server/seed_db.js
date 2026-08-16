@@ -8,7 +8,7 @@ dotenv.config();
 const categoriesData = [
   { nameGujarati: "બ્રાઇડલ મહેંદી", nameEnglish: "Bridal Mehendi", slug: "bridal-mehendi", order: 1 },
   { nameGujarati: "પાર્ટી મહેંદી", nameEnglish: "Party Mehendi", slug: "party-mehendi", order: 2 },
-  { nameGujarati: "આર્બિક મહેંદી", nameEnglish: "Arabic Mehendi", slug: "arabic-mehendi", order: 3 },
+  { nameGujarati: "સાઇડર મહેંદી", nameEnglish: "Sider Mehendi", slug: "sider-mehendi", order: 3 },
   { nameGujarati: "नेઇલ આર્ટ", nameEnglish: "Nail Art", slug: "nail-art", order: 4 },
   { nameGujarati: "વેક્સિંગ", nameEnglish: "Waxing", slug: "waxing", order: 5 },
   { nameGujarati: "ખાટલી વર્ક", nameEnglish: "Khatli Work", slug: "khatli-work", order: 6 },
@@ -56,14 +56,14 @@ const servicesData = [
     order: 1
   },
   {
-    categorySlug: "arabic-mehendi",
-    titleGujarati: "દુબઈ સ્ટાઈલ અરેબિક મહેંદી",
-    titleEnglish: "Dubai Style Arabic Mehendi",
-    descriptionGujarati: "ઘટ્ટ બ્લેક અને બ્રાઉન શેડિંગ સાથે હાથ પર સુંદર વેલ અને ફ્લાવર આર્ટ વાળી અરેબિક ડિઝાઇન.",
+    categorySlug: "sider-mehendi",
+    titleGujarati: "આકર્ષક સાઇડર મહેંદી",
+    titleEnglish: "Beautiful Sider Mehendi",
+    descriptionGujarati: "લગ્નપ્રસંગે પરિવારના સભ્યો, બહેનપણીઓ અને મહેમાનો માટે સુંદર સાઇડર મહેંદી ડિઝાઈન.",
     priceNote: "₹૭૦૦ થી શરૂ",
     image: {
       url: "https://images.unsplash.com/photo-1605899435973-ca2d1a8861cf?auto=format&fit=crop&q=80&w=600",
-      publicId: "arabic_mehendi_1"
+      publicId: "sider_mehendi_1"
     },
     isFeatured: true,
     order: 1
