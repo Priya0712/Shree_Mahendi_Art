@@ -1,83 +1,62 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
+const navLinks = [
+  { to: '/', label: 'હોમ' },
+  { to: '/about', label: 'અમારી વિશે' },
+  { to: '/services', label: 'સેવાઓ' },
+  { to: '/gallery', label: 'ગેલેરી' },
+  { to: '/testimonials', label: 'સમીક્ષાઓ' },
+  { to: '/contact', label: 'સંપર્ક' },
+];
 
-  const navItems = [
-    { name: 'હોમ', path: '/' },
-    { name: 'અમારા વિશે', path: '/about' },
-    { name: 'સેવાઓ', path: '/services' },
-    { name: 'ગેલેરી', path: '/gallery' },
-    { name: 'સમીક્ષાઓ', path: '/testimonials' },
-    { name: 'સંપર્ક', path: '/contact' }
-  ];
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-primary text-cream shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo / Brand Name */}
-          <Link to="/" className="flex items-center gap-1.5">
-            <span className="font-heading text-2xl md:text-3xl font-bold text-accent tracking-wide hover:text-accent-light transition-colors">
-              શ્રી મહેંદી
-            </span>
-          </Link>
+    <header className="sticky top-0 z-40 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/30">
+      <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
+        <Link to="/" className="text-xl font-bold text-[#6B2E1F]">શ્રી મહેંદી</Link>
 
-          {/* Desktop Nav Items */}
-          <div className="hidden md:flex space-x-6">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`text-sm font-semibold transition-colors py-1 ${
-                    isActive ? 'text-accent border-b-2 border-accent' : 'text-cream/90 hover:text-accent'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
+        <nav className="hidden md:flex gap-6">
+          {navLinks.map((l) => (
+            <NavLink key={l.to} to={l.to} className={({ isActive }) =>
+              `text-sm font-medium ${isActive ? 'text-[#6B2E1F] border-b-2 border-[#D4AF37]' : 'text-[#4A2E22]'}`}>
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-cream hover:text-accent focus:outline-none p-1"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
+        <button className="md:hidden text-[#6B2E1F]" onClick={() => setOpen(true)} aria-label="મેનુ ખોલો">
+          <Menu size={26} />
+        </button>
       </div>
 
-      {/* Mobile Nav Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-primary-dark border-t border-primary/20">
-          <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 flex flex-col">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`px-3 py-2 rounded-md text-base font-semibold ${
-                    isActive ? 'bg-primary text-accent' : 'text-cream/95 hover:bg-primary/50 hover:text-accent'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
+      {/* Mobile drawer */}
+      {open && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-72 bg-[#FFF8F0] shadow-xl p-6 flex flex-col">
+            <div className="flex justify-between items-center mb-8">
+              <span className="text-lg font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
+              <button onClick={() => setOpen(false)} aria-label="બંધ કરો"><X size={24} /></button>
+            </div>
+            {navLinks.map((l) => (
+              <NavLink key={l.to} to={l.to} onClick={() => setOpen(false)}
+                className={({ isActive }) => `py-3 text-base border-b border-[#D4AF37]/20 ${isActive ? 'text-[#6B2E1F] font-semibold' : 'text-[#4A2E22]'}`}>
+                {l.label}
+              </NavLink>
+            ))}
+            <a href="https://wa.me/918799008221" target="_blank" rel="noreferrer"
+              className="mt-6 bg-[#25D366] text-white text-center py-3 rounded-full font-semibold">
+              WhatsApp બુકિંગ
+            </a>
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
-}
+};
+
+export default Navbar;
