@@ -60,11 +60,11 @@ const Home = () => {
       {/* Services Section */}
       <Services />
 
-      {/* Before/After comparisons — ખાલી હાથ (left) → મહેંદી (right) */}
+      {/* Before/After slider — ડાબી: મહેંદી, જમણી: ખાલી હાથ */}
       <FadeInSection>
-        <BeforeAfterSlider 
-          beforeImg="/images/before-plain-hand.jpg" 
-          afterImg="/images/after-bridal-mehendi.jpg" 
+        <BeforeAfterSlider
+          mehendiImg="/images/mehendi-both-hands.jpg"
+          plainImg="/images/before-plain-hand.jpg"
         />
       </FadeInSection>
       
