@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import WhatsAppFloat from './components/common/WhatsAppFloat';
@@ -22,6 +22,7 @@ import ManageServices from './pages/admin/ManageServices';
 import ManageTestimonials from './pages/admin/ManageTestimonials';
 import Inquiries from './pages/admin/Inquiries';
 import AdminLayout from './components/admin/AdminLayout';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function AppContent() {
   const location = useLocation();
@@ -42,13 +43,16 @@ function AppContent() {
           <Route path="/testimonials" element={<Testimonials />} />
           
           {/* Admin Routes */}
-          <Route path="/admin" element={<Login />} />
-          <Route path="/admin/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
-          <Route path="/admin/gallery" element={<AdminLayout><ManageGallery /></AdminLayout>} />
-          <Route path="/admin/categories" element={<AdminLayout><ManageCategories /></AdminLayout>} />
-          <Route path="/admin/services" element={<AdminLayout><ManageServices /></AdminLayout>} />
-          <Route path="/admin/testimonials" element={<AdminLayout><ManageTestimonials /></AdminLayout>} />
-          <Route path="/admin/inquiries" element={<AdminLayout><Inquiries /></AdminLayout>} />
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="gallery" element={<ManageGallery />} />
+            <Route path="categories" element={<ManageCategories />} />
+            <Route path="services" element={<ManageServices />} />
+            <Route path="testimonials" element={<ManageTestimonials />} />
+            <Route path="inquiries" element={<Inquiries />} />
+          </Route>
         </Routes>
       </main>
 
