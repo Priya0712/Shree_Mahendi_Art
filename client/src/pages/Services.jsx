@@ -105,8 +105,8 @@ const Services = () => {
         </div>
       </FadeInSection>
 
-      {/* Mehendi Cones dedicated section */}
-      {!loading && conesServices.length > 0 && (
+      {/* Mehendi Cones section — always visible with real photos + optional DB items */}
+      {!loading && (
         <FadeInSection>
           <div className="mt-12">
             <ConesSection cones={conesServices} />
