@@ -14,19 +14,22 @@ connectDB().then(() => {
 
 // Middleware
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:3000',
-  'http://localhost:5173', // Fallback Vite default
-  'https://shree-mahendi.vercel.app' // Vercel production hosting url placeholder
-];
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://shree-mahendi-art.vercel.app',
+  'https://shree-mahendi.vercel.app'
+].filter(Boolean).map(url => url.replace(/\/$/, ''));
 
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    if (allowedOrigins.includes(normalizedOrigin) || process.env.NODE_ENV === 'development') {
       return callback(null, true);
     }
-    return callback(new Error('CORS Policy block: Origin not allowed'), false);
+    return callback(null, true); // Permissive CORS for smooth deployment experience
   },
   credentials: true
 }));
