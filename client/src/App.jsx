@@ -9,11 +9,6 @@ import SplashScreen from './components/common/SplashScreen';
 
 // Public Pages
 import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import Gallery from './pages/Gallery';
-import Contact from './pages/Contact';
-import Testimonials from './pages/Testimonials';
 
 // Admin Pages
 import Login from './pages/admin/Login';
@@ -46,11 +41,11 @@ function AppContent() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/about" element={<Navigate to="/#about" replace />} />
+          <Route path="/services" element={<Navigate to="/#services" replace />} />
+          <Route path="/gallery" element={<Navigate to="/#gallery" replace />} />
+          <Route path="/testimonials" element={<Navigate to="/#testimonials" replace />} />
+          <Route path="/contact" element={<Navigate to="/#contact" replace />} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<Login />} />

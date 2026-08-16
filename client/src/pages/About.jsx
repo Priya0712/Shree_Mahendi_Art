@@ -1,22 +1,22 @@
-import PageHeader from '../components/common/PageHeader';
 import { Instagram, MessageCircle, Award, Heart, Sparkles } from 'lucide-react';
-import SEO from '../components/common/SEO';
 
 const highlights = [
   { icon: Award, title: '૫+ વર્ષનો અનુભવ', desc: 'બ્રાઇડલ અને પાર્ટી મહેંદીમાં નિપુણતા' },
-  { icon: Heart, title: '૩૦ઓવર ગ્રાહકો', desc: 'દરેક ડિઝાઈનમાં વ્યક્તિગત ધ્યાન' },
+  { icon: Heart, title: '૩૦૦+ ગ્રાહકો', desc: 'દરેક ડિઝાઈનમાં વ્યક્તિગત ધ્યાન' },
   { icon: Sparkles, title: 'બધા પ્રકારની સેવા', desc: 'મહેંદી, નેઇલ આર્ટ, વેક્સિંગ, ખાટલી વર્ક' },
 ];
 
 const About = () => (
-  <>
-    <SEO title="અમારા વિશે" description="શ્રી મહેંદી પાછળની વાર્તા - ૫+ વર્ષનો અનુભવ, બ્રાઇડલ અને પાર્ટી મહેંદીમાં નિપુણતા." />
-    <PageHeader title="અમારા વિશે" subtitle="શ્રી મહેંદી પાછળની વાર્તા" />
+  <section id="about" className="py-16 bg-gradient-to-b from-[#FFF8F0] to-white border-t border-[#D4AF37]/20 scroll-mt-16">
+    <div className="text-center mb-10">
+      <h2 className="text-3xl font-bold text-[#6B2E1F] inline-block border-b-2 border-[#D4AF37] pb-2">અમારા વિશે</h2>
+      <p className="text-[#4A2E22] text-sm mt-2">શ્રી મહેંદી પાછળની વાર્તા</p>
+    </div>
 
-    <section className="max-w-4xl mx-auto px-4 py-10">
+    <div className="max-w-4xl mx-auto px-4">
       <div className="flex flex-col md:flex-row gap-8 items-center mb-10">
         <img src="/images/owner-portrait.jpg" alt="શ્રી મહેંદી - કલાકાર"
-          className="w-full md:w-72 h-64 md:h-80 object-cover rounded-3xl shadow-lg" loading="lazy" />
+          className="w-full md:w-72 h-64 md:h-80 object-cover rounded-3xl shadow-lg border-2 border-[#D4AF37]/30" loading="lazy" />
         <div>
           <h2 className="text-xl font-bold text-[#6B2E1F] mb-3">નમસ્તે, હું છું શ્રી મહેંદીની કલાકાર!</h2>
           <p className="text-[#4A2E22] text-sm leading-relaxed mb-3">
@@ -32,7 +32,7 @@ const About = () => (
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         {highlights.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="bg-[#FFF3E0] rounded-2xl p-5 text-center">
+          <div key={title} className="bg-[#FFF3E0]/70 rounded-2xl p-5 text-center border border-[#D4AF37]/10">
             <Icon className="mx-auto text-[#C1662F] mb-2" size={28} />
             <p className="font-semibold text-[#6B2E1F] text-sm">{title}</p>
             <p className="text-xs text-[#4A2E22] mt-1">{desc}</p>
@@ -40,23 +40,23 @@ const About = () => (
         ))}
       </div>
 
-      <div className="bg-[#6B2E1F] rounded-3xl p-6 sm:p-8 text-center">
+      <div className="bg-[#6B2E1F] rounded-3xl p-6 sm:p-8 text-center shadow-md">
         <p className="text-white text-base sm:text-lg font-medium mb-4">
           અમારું કામ Instagram પર જુઓ અથવા સીધા WhatsApp પર વાત કરો
         </p>
         <div className="flex justify-center gap-3">
           <a href="https://www.instagram.com/pili_mahendi_nail_art_007" target="_blank" rel="noreferrer"
-            className="flex items-center gap-2 bg-white text-[#6B2E1F] px-5 py-2.5 rounded-full font-semibold text-sm">
+            className="flex items-center gap-2 bg-white text-[#6B2E1F] px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#FFF8F0] active:scale-95 transition">
             <Instagram size={16} /> Instagram
           </a>
           <a href="https://wa.me/918799008221" target="_blank" rel="noreferrer"
-            className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-full font-semibold text-sm">
+            className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:bg-[#20ba5a] active:scale-95 transition">
             <MessageCircle size={16} /> WhatsApp
           </a>
         </div>
       </div>
-    </section>
-  </>
+    </div>
+  </section>
 );
 
 export default About;

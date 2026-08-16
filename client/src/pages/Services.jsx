@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { optimizedUrl } from '../utils/cloudinaryUrl';
-import PageHeader from '../components/common/PageHeader';
 import ServiceDetailModal from '../components/services/ServiceDetailModal';
 import ConesSection from '../components/services/ConesSection';
-import SEO from '../components/common/SEO';
-import QuickBookBar from '../components/common/QuickBookBar';
 import FadeInSection from '../components/common/FadeInSection';
 
 const Services = () => {
@@ -23,7 +20,7 @@ const Services = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching services page data:', err.message);
+        console.error('Error fetching services section data:', err.message);
         setLoading(false);
       });
   }, []);
@@ -45,20 +42,19 @@ const Services = () => {
     : regularServices.filter((s) => s.category?._id === activeCategory || s.category?.slug === activeCategory);
 
   return (
-    <>
-      <SEO title="અમારી સેવાઓ" description="બ્રાઇડલ મહેંદી, આર્બિક મહેંદી, નેઇલ આર્ટ અને વધુ - બધી સેવાઓ એક જ જગ્યાએ." />
-      <PageHeader
-        title="અમારી સેવાઓ"
-        subtitle="બ્રાઇડલ મહેંદીથી લઈને નેઇલ આર્ટ સુધી — દરેક પ્રસંગ માટે"
-      />
+    <section id="services" className="py-16 bg-[#FFF8F0]/30 border-t border-[#D4AF37]/20 scroll-mt-16">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold text-[#6B2E1F] inline-block border-b-2 border-[#D4AF37] pb-2">અમારી સેવાઓ</h2>
+        <p className="text-[#4A2E22] text-sm mt-2">બ્રાઇડલ મહેંદીથી લઈને નેઇલ આર્ટ સુધી — દરેક પ્રસંગ માટે</p>
+      </div>
 
       {/* Sticky category chip bar */}
-      <div className="sticky top-[57px] z-30 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/20 py-3">
+      <div className="sticky top-[64px] z-30 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/10 py-3 mb-6">
         <div className="flex gap-2 overflow-x-auto px-4 max-w-6xl mx-auto no-scrollbar">
           <button
             onClick={() => setActiveCategory('all')}
             className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
-              activeCategory === 'all' ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+              activeCategory === 'all' ? 'bg-[#6B2E1F] text-white shadow-sm' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/30'
             }`}
           >
             બધું
@@ -68,7 +64,7 @@ const Services = () => {
               key={c._id}
               onClick={() => setActiveCategory(c._id)}
               className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
-                activeCategory === c._id ? 'bg-[#6B2E1F] text-white' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/40'
+                activeCategory === c._id ? 'bg-[#6B2E1F] text-white shadow-sm' : 'bg-white text-[#4A2E22] border border-[#D4AF37]/30'
               }`}
             >
               {c.nameGujarati}
@@ -78,7 +74,7 @@ const Services = () => {
       </div>
 
       <FadeInSection>
-        <section className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto px-4">
           {loading ? (
             <ServiceGridSkeleton />
           ) : filtered.length === 0 ? (
@@ -90,7 +86,7 @@ const Services = () => {
                   key={s._id}
                   id={s._id}
                   onClick={() => setSelectedService(s)}
-                  className="text-left bg-white rounded-2xl overflow-hidden shadow-sm active:scale-95 transition focus:outline-none"
+                  className="text-left bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md active:scale-95 transition focus:outline-none border border-[#D4AF37]/10"
                 >
                   <div className="h-32 sm:h-40 overflow-hidden">
                     {s.image?.url && (
@@ -107,21 +103,22 @@ const Services = () => {
               ))}
             </div>
           )}
-        </section>
+        </div>
       </FadeInSection>
 
       {/* Mehendi Cones dedicated section */}
       {!loading && conesServices.length > 0 && (
         <FadeInSection>
-          <ConesSection cones={conesServices} />
+          <div className="mt-12">
+            <ConesSection cones={conesServices} />
+          </div>
         </FadeInSection>
       )}
 
       {selectedService && (
         <ServiceDetailModal service={selectedService} onClose={() => setSelectedService(null)} />
       )}
-      <QuickBookBar />
-    </>
+    </section>
   );
 };
 

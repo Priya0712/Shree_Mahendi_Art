@@ -1,54 +1,90 @@
+import { useEffect } from 'react';
 import SEO from '../components/common/SEO';
 import Hero from '../components/home/Hero';
 import TrustStats from '../components/home/TrustStats';
-import ServicesPreview from '../components/home/ServicesPreview';
-import SeasonalBanner from '../components/home/SeasonalBanner';
-import GalleryPreview from '../components/home/GalleryPreview';
+import About from './About';
+import Services from './Services';
+import Gallery from './Gallery';
 import BeforeAfterSlider from '../components/home/BeforeAfterSlider';
 import InstagramSection from '../components/home/InstagramSection';
-import TestimonialsPreview from '../components/home/TestimonialsPreview';
+import Testimonials from './Testimonials';
+import Contact from './Contact';
 import FadeInSection from '../components/common/FadeInSection';
+import QuickBookBar from '../components/common/QuickBookBar';
 
-const Home = () => (
-  <>
-    <SEO
-      title="બ્રાઇડલ મહેંદી અને નેઇલ આર્ટ"
-      description="શ્રી મહેંદી - બ્રાઇડલ મહેંદી, પાર્ટી મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક માટે વિશ્વસનીય નામ. હમણાં જ WhatsApp પર બુક કરો."
-      image="/images/logo.jpg"
-    />
-    <Hero />
-    
-    <FadeInSection>
-      <TrustStats />
-    </FadeInSection>
-    
-    <FadeInSection>
-      <ServicesPreview />
-    </FadeInSection>
-    
-    <FadeInSection delay={0.1}>
-      <SeasonalBanner />
-    </FadeInSection>
-    
-    <FadeInSection>
-      <GalleryPreview />
-    </FadeInSection>
+const Home = () => {
+  useEffect(() => {
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      const timer = setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          const offset = 70;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = el.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
 
-    <FadeInSection>
-      <BeforeAfterSlider 
-        beforeImg="/images/before-plain-hand.jpg" 
-        afterImg="/images/after-bridal-mehendi.jpg" 
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+          });
+        }
+      }, 500); // 500ms delay to allow sections to load/render
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  return (
+    <>
+      <SEO
+        title="બ્રાઇડલ મહેંદી અને નેઇલ આર્ટ"
+        description="શ્રી મહેંદી - બ્રાઇડલ મહેંદી, પાર્ટી મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક માટે વિશ્વસનીય નામ. હમણાં જ WhatsApp પર બુક કરો."
+        image="/images/logo.jpg"
       />
-    </FadeInSection>
-    
-    <FadeInSection>
-      <InstagramSection />
-    </FadeInSection>
-    
-    <FadeInSection>
-      <TestimonialsPreview />
-    </FadeInSection>
-  </>
-);
+      
+      {/* Home / Hero Section */}
+      <div id="home">
+        <Hero />
+      </div>
+      
+      <FadeInSection>
+        <TrustStats />
+      </FadeInSection>
+
+      {/* About Section */}
+      <FadeInSection>
+        <About />
+      </FadeInSection>
+      
+      {/* Services Section */}
+      <Services />
+
+      {/* Before/After comparisons & Instagram preview */}
+      <FadeInSection>
+        <BeforeAfterSlider 
+          beforeImg="/images/before-plain-hand.jpg" 
+          afterImg="/images/after-bridal-mehendi.jpg" 
+        />
+      </FadeInSection>
+      
+      <FadeInSection>
+        <InstagramSection />
+      </FadeInSection>
+
+      {/* Gallery Section */}
+      <Gallery />
+      
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Contact Section */}
+      <Contact />
+
+      {/* Global conversion Quick Book Bar */}
+      <QuickBookBar />
+    </>
+  );
+};
 
 export default Home;
