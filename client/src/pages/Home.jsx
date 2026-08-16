@@ -60,7 +60,7 @@ const Home = () => {
       {/* Services Section */}
       <Services />
 
-      {/* Before/After comparisons & Instagram preview */}
+      {/* Before/After comparisons — ખાલી હાથ (left) → મહેંદી (right) */}
       <FadeInSection>
         <BeforeAfterSlider 
           beforeImg="/images/before-plain-hand.jpg" 
