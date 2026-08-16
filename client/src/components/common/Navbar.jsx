@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone, MessageCircle } from 'lucide-react';
 
 const navLinks = [
   { id: 'home', label: 'હોમ' },
-  { id: 'about', label: 'અમારી વિશે' },
+  { id: 'about', label: 'અમારા વિશે' },
   { id: 'services', label: 'સેવાઓ' },
   { id: 'gallery', label: 'ગેલેરી' },
   { id: 'testimonials', label: 'સમીક્ષાઓ' },
@@ -16,15 +17,26 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
   const navigate = useNavigate();
-  const isAdmin = location.pathname.startsWith('/admin');
+  const isAdmin = location.pathname.startsWith('/admin') || location.pathname.startsWith('/secure-yk-admin');
+
+  // Prevent background body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
 
   useEffect(() => {
     if (isAdmin) return;
 
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 120; // offset for sticky navbar
+      const scrollPos = window.scrollY + 120;
 
-      // Check if scrolled to the absolute bottom of the page
       if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 60) {
         setActiveSection('contact');
         return;
@@ -44,7 +56,7 @@ const Navbar = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // run initially
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isAdmin, location.pathname]);
 
@@ -72,74 +84,122 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFF8F0]/95 backdrop-blur border-b border-[#D4AF37]/30">
-      <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
-        <Link to="/" onClick={(e) => handleNavClick(e, 'home')} className="flex items-center gap-2">
-          <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]" />
-          <span className="text-xl font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
-        </Link>
+    <>
+      <header className="sticky top-0 z-40 bg-[#FFF8F0]/95 backdrop-blur-md border-b border-[#D4AF37]/30 shadow-sm">
+        <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
+          <Link to="/" onClick={(e) => handleNavClick(e, 'home')} className="flex items-center gap-2.5">
+            <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-10 w-10 rounded-full object-cover border border-[#D4AF37] shadow-sm" />
+            <span className="text-xl font-bold text-[#6B2E1F] tracking-wide">શ્રી મહેંદી</span>
+          </Link>
 
-        <nav className="hidden md:flex gap-6">
-          {navLinks.map((l) => (
-            <a
-              key={l.id}
-              href={`#${l.id}`}
-              onClick={(e) => handleNavClick(e, l.id)}
-              className={`relative py-1 text-sm font-medium transition duration-300 ${
-                activeSection === l.id && !isAdmin ? 'text-[#6B2E1F] font-semibold' : 'text-[#4A2E22] hover:text-[#6B2E1F]'
-              }`}
-            >
-              {l.label}
-              <span
-                className={`absolute bottom-0 left-0 w-full h-[2px] bg-[#D4AF37] transition-transform duration-300 origin-left ${
-                  activeSection === l.id && !isAdmin ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
+          <nav className="hidden md:flex gap-6">
+            {navLinks.map((l) => (
+              <a
+                key={l.id}
+                href={`#${l.id}`}
+                onClick={(e) => handleNavClick(e, l.id)}
+                className={`relative py-1 text-sm font-medium transition duration-300 ${
+                  activeSection === l.id && !isAdmin ? 'text-[#6B2E1F] font-bold' : 'text-[#4A2E22] hover:text-[#6B2E1F]'
                 }`}
-              />
-            </a>
-          ))}
-        </nav>
-
-        <button className="md:hidden text-[#6B2E1F]" onClick={() => setOpen(true)} aria-label="મેનુ ખોલો">
-          <Menu size={26} />
-        </button>
-      </div>
-
-      {/* Mobile drawer */}
-      {open && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-72 bg-[#FFF8F0] shadow-xl p-6 flex flex-col">
-            <div className="flex justify-between items-center mb-8">
-              <div className="flex items-center gap-2">
-                <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-9 w-9 rounded-full object-cover border border-[#D4AF37]" />
-                <span className="text-lg font-bold text-[#6B2E1F]">શ્રી મહેંદી</span>
-              </div>
-              <button onClick={() => setOpen(false)} aria-label="બંધ કરો"><X size={24} /></button>
-            </div>
-            
-            <nav className="flex flex-col gap-4">
-              {navLinks.map((l) => (
-                <a
-                  key={l.id}
-                  href={`#${l.id}`}
-                  onClick={(e) => handleNavClick(e, l.id)}
-                  className={`py-3 text-base border-b border-[#D4AF37]/20 transition-all ${
-                    activeSection === l.id && !isAdmin ? 'text-[#6B2E1F] font-bold border-l-4 border-l-[#D4AF37] pl-2' : 'text-[#4A2E22]'
+              >
+                {l.label}
+                <span
+                  className={`absolute bottom-0 left-0 w-full h-[2px] bg-[#D4AF37] transition-transform duration-300 origin-left ${
+                    activeSection === l.id && !isAdmin ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
                   }`}
-                >
-                  {l.label}
-                </a>
-              ))}
-            </nav>
+                />
+              </a>
+            ))}
+          </nav>
 
-            <a href="https://wa.me/918799008221" target="_blank" rel="noreferrer"
-              className="mt-8 bg-[#25D366] text-white text-center py-3 rounded-full font-semibold shadow-md active:scale-95 transition">
-              WhatsApp બુકિંગ
-            </a>
-          </div>
+          <button 
+            className="md:hidden p-2 text-[#6B2E1F] hover:bg-[#6B2E1F]/5 rounded-xl transition cursor-pointer" 
+            onClick={() => setOpen(true)} 
+            aria-label="મેનુ ખોલો"
+          >
+            <Menu size={28} />
+          </button>
         </div>
+      </header>
+
+      {/* Render Mobile Drawer via Portal at document.body level to avoid iOS sticky clipping */}
+      {open && createPortal(
+        <div className="fixed inset-0 z-[99999] md:hidden flex justify-end">
+          {/* Dark backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+            onClick={() => setOpen(false)} 
+          />
+
+          {/* Drawer Content */}
+          <div className="relative w-[85%] max-w-sm h-full bg-[#FFF8F0] shadow-2xl flex flex-col justify-between p-6 z-10 overflow-y-auto border-l border-[#D4AF37]/30 animate-in slide-in-from-right duration-300">
+            <div>
+              {/* Header inside drawer */}
+              <div className="flex justify-between items-center pb-5 mb-6 border-b border-[#D4AF37]/25">
+                <div className="flex items-center gap-2.5">
+                  <img src="/images/logo.jpg" alt="શ્રી મહેંદી" className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]" />
+                  <div>
+                    <span className="text-lg font-bold text-[#6B2E1F] block leading-tight">શ્રી મહેંદી</span>
+                    <span className="text-[10px] text-[#8B6F5E] font-semibold uppercase tracking-wider">મેહંદી & નેઇલ આર્ટ</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setOpen(false)} 
+                  className="p-2 text-[#6B2E1F] hover:bg-[#6B2E1F]/10 rounded-full transition cursor-pointer"
+                  aria-label="મેનુ બંધ કરો"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              {/* Nav links */}
+              <nav className="flex flex-col space-y-2">
+                {navLinks.map((l) => {
+                  const isActive = activeSection === l.id && !isAdmin;
+                  return (
+                    <a
+                      key={l.id}
+                      href={`#${l.id}`}
+                      onClick={(e) => handleNavClick(e, l.id)}
+                      className={`px-4 py-3 rounded-xl text-base font-bold transition-all flex items-center justify-between ${
+                        isActive 
+                          ? 'bg-[#6B2E1F] text-[#FFF8F0] shadow-md' 
+                          : 'text-[#4A2E22] hover:bg-[#6B2E1F]/10 hover:text-[#6B2E1F]'
+                      }`}
+                    >
+                      <span>{l.label}</span>
+                      {isActive && <span className="w-2 h-2 rounded-full bg-[#D4AF37]" />}
+                    </a>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 border-t border-[#D4AF37]/25 space-y-3 mt-6">
+              <a 
+                href="https://wa.me/918799008221?text=નમસ્તે%20શ્રી%20મહેંદી,%20હું%20બુકિંગ%20અંગે%20માહિતી%20મેળવવા%20માગું%20છું." 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white py-3.5 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition text-sm"
+              >
+                <MessageCircle size={18} />
+                <span>WhatsApp બુકિંગ</span>
+              </a>
+
+              <a 
+                href="tel:918799008221" 
+                className="w-full bg-white border border-[#6B2E1F]/30 text-[#6B2E1F] py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#6B2E1F]/5 transition text-sm"
+              >
+                <Phone size={16} />
+                <span>કોલ કરો (8799008221)</span>
+              </a>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
-    </header>
+    </>
   );
 };
 
