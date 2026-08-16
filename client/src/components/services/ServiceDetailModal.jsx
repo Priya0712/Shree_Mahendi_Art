@@ -22,9 +22,6 @@ const ServiceDetailModal = ({ service, onClose }) => {
           <h2 className="text-xl font-bold text-[#6B2E1F]">{service.titleGujarati}</h2>
           {service.titleEnglish && <p className="text-sm text-[#8B6F5E] mb-2">{service.titleEnglish}</p>}
           <p className="text-[#4A2E22] text-sm leading-relaxed mt-2">{service.descriptionGujarati}</p>
-          {service.priceNote && (
-            <p className="text-[#C1662F] font-semibold mt-4">{service.priceNote}</p>
-          )}
 
           <a
             href={`https://wa.me/918799008221?text=${waMessage}`}

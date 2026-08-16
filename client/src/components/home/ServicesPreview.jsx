@@ -31,7 +31,6 @@ const ServicesPreview = () => {
             </div>
             <div className="p-3">
               <p className="font-semibold text-sm text-[#2B1810] truncate">{s.titleGujarati}</p>
-              {s.priceNote && <p className="text-xs text-[#C1662F] mt-1">{s.priceNote}</p>}
             </div>
           </Link>
         ))}

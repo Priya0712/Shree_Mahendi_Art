@@ -97,7 +97,6 @@ const Services = () => {
                   <div className="p-3">
                     <p className="font-semibold text-sm text-[#2B1810] truncate">{s.titleGujarati}</p>
                     {s.titleEnglish && <p className="text-[11px] text-[#8B6F5E]">{s.titleEnglish}</p>}
-                    {s.priceNote && <p className="text-xs text-[#C1662F] mt-1 font-medium">{s.priceNote}</p>}
                   </div>
                 </button>
               ))}

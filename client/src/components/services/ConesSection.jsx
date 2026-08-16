@@ -18,7 +18,6 @@ const ConesSection = ({ cones }) => {
                 <img src={optimizedUrl(c.image.url, 300)} alt={c.titleGujarati} className="w-full h-24 object-cover rounded-xl mb-2" loading="lazy" />
               )}
               <p className="text-sm font-medium">{c.titleGujarati}</p>
-              {c.priceNote && <p className="text-xs text-[#C1662F] mt-1">{c.priceNote}</p>}
             </div>
           ))}
         </div>
