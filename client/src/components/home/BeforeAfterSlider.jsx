@@ -1,11 +1,20 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-// mehendiImg = left side (full, no crop)
-// plainImg   = right side (plain hand)
 const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
   const [position, setPosition] = useState(50);
   const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
   const isDragging = useRef(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    setContainerWidth(containerRef.current.offsetWidth);
+    const ro = new ResizeObserver(() => {
+      if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   const handleMove = (clientX) => {
     if (!containerRef.current) return;
@@ -23,14 +32,10 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
         </p>
       </div>
 
-      {/*
-        The container uses a tall aspect ratio (3:4) to naturally fit the portrait
-        mehendi photo. Both images use object-contain so NOTHING is cropped.
-      */}
       <div
         ref={containerRef}
-        className="relative w-full rounded-3xl overflow-hidden select-none touch-none shadow-xl bg-[#FFF8F0] cursor-ew-resize"
-        style={{ aspectRatio: '3 / 4' }}
+        className="relative w-full rounded-3xl overflow-hidden select-none touch-none shadow-xl cursor-ew-resize"
+        style={{ aspectRatio: '4 / 5' }}
         onMouseDown={() => { isDragging.current = true; }}
         onMouseUp={() => { isDragging.current = false; }}
         onMouseLeave={() => { isDragging.current = false; }}
@@ -39,46 +44,47 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
         onTouchEnd={() => { isDragging.current = false; }}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
       >
-        {/* RIGHT base: plain empty hand — full, no crop */}
+        {/* RIGHT base: plain empty hand — fills full container, no letterbox */}
         <img
           src={plainImg}
           alt="ખાલી હાથ"
-          className="absolute inset-0 w-full h-full object-contain"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* LEFT overlay: full mehendi photo clipped to slider position */}
+        {/* LEFT overlay: mehendi photo — clips to slider position
+            The image is always full container width so it looks like a "window" 
+            revealing left-to-right. object-position: top keeps hands in view */}
         <div
-          className="absolute inset-0 overflow-hidden"
+          className="absolute top-0 left-0 h-full overflow-hidden"
           style={{ width: `${position}%` }}
         >
           <img
             src={mehendiImg}
             alt="બ્રાઇડલ મહેંદી"
-            className="absolute inset-0 h-full object-contain bg-[#FFF8F0]"
-            style={{ width: containerRef.current?.offsetWidth ?? '100%' }}
+            className="absolute top-0 left-0 h-full object-cover object-top"
+            style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100%' }}
           />
         </div>
 
-        {/* Divider + handle */}
+        {/* Divider line + drag handle */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white/80 shadow-lg pointer-events-none"
+          className="absolute top-0 bottom-0 w-[2px] bg-white shadow-lg pointer-events-none"
           style={{ left: `${position}%` }}
         >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 bg-white rounded-full shadow-xl flex items-center justify-center text-[#6B2E1F] font-bold text-sm border-2 border-[#D4AF37]/40">
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 bg-white rounded-full shadow-xl flex items-center justify-center text-[#6B2E1F] font-bold border-2 border-[#D4AF37]/40">
             ⇔
           </div>
         </div>
 
-        {/* Corner labels */}
-        <span className="absolute bottom-3 left-3 bg-[#6B2E1F]/80 text-white text-xs px-3 py-1 rounded-full font-semibold pointer-events-none">
+        {/* Labels */}
+        <span className="absolute bottom-3 left-3 bg-[#6B2E1F]/80 text-white text-xs px-3 py-1.5 rounded-full font-semibold pointer-events-none shadow">
           🌿 મહેંદી
         </span>
-        <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1 rounded-full font-semibold pointer-events-none">
+        <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1.5 rounded-full font-semibold pointer-events-none shadow">
           ✋ ખાલી હાથ
         </span>
       </div>
 
-      {/* Range slider — accessible and mobile-friendly */}
       <input
         type="range" min="0" max="100" value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
