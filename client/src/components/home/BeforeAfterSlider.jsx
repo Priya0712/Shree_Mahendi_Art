@@ -35,7 +35,7 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
       <div
         ref={containerRef}
         className="relative w-full rounded-3xl overflow-hidden select-none touch-none shadow-xl cursor-ew-resize"
-        style={{ aspectRatio: '16 / 9' }}
+        style={{ aspectRatio: '3 / 2' }}
         onMouseDown={() => { isDragging.current = true; }}
         onMouseUp={() => { isDragging.current = false; }}
         onMouseLeave={() => { isDragging.current = false; }}
@@ -61,7 +61,7 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
           <img
             src={mehendiImg}
             alt="બ્રાઇડલ મહેંદી"
-            className="absolute top-0 left-0 h-full object-cover object-top"
+            className="absolute top-0 left-0 h-full object-cover object-[center_30%]"
             style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100%' }}
           />
         </div>

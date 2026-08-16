@@ -5,5 +5,7 @@ const protect = require('../middleware/auth');
 
 router.get('/', settingsController.getSettings);
 router.put('/', protect, settingsController.updateSettings);
+router.post('/upload-image', protect, settingsController.uploadSliderImage);
 
 module.exports = router;
+
