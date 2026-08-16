@@ -5,6 +5,9 @@ const protect = (req, res, next) => {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Not authorized' });
   }
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({ message: 'Server misconfiguration: JWT_SECRET not set' });
+  }
   try {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

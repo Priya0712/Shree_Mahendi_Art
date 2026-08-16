@@ -1,13 +1,16 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LayoutDashboard, Image, Sparkles, FolderTree, Inbox, LogOut } from 'lucide-react';
+import { LayoutDashboard, Image, Sparkles, FolderTree, Inbox, LogOut, Settings } from 'lucide-react';
+
+const adminPath = import.meta.env.VITE_ADMIN_PATH || '/admin';
 
 const navItems = [
-  { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/gallery', label: 'Gallery', icon: Image },
-  { to: '/admin/services', label: 'Services', icon: Sparkles },
-  { to: '/admin/categories', label: 'Categories', icon: FolderTree },
-  { to: '/admin/inquiries', label: 'Inquiries', icon: Inbox },
+  { to: `${adminPath}/dashboard`, label: 'Dashboard', icon: LayoutDashboard },
+  { to: `${adminPath}/gallery`, label: 'Gallery', icon: Image },
+  { to: `${adminPath}/services`, label: 'Services', icon: Sparkles },
+  { to: `${adminPath}/categories`, label: 'Categories', icon: FolderTree },
+  { to: `${adminPath}/inquiries`, label: 'Inquiries', icon: Inbox },
+  { to: `${adminPath}/settings`, label: 'Settings', icon: Settings },
 ];
 
 const AdminLayout = () => {

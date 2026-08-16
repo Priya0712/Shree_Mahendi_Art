@@ -10,13 +10,16 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const adminPath = import.meta.env.VITE_ADMIN_PATH || '/admin';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
       await login(username, password);
-      navigate('/admin/dashboard');
+      localStorage.setItem('admin_username', username);
+      navigate(`${adminPath}/dashboard`);
     } catch (err) {
       setError('Invalid username or password');
     } finally {

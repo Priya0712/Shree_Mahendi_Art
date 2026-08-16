@@ -3,7 +3,7 @@ node_modules/
 client/node_modules/
 server/node_modules/
 
-# Environment files
+# Environment files — real secrets, never commit
 .env
 .env.local
 .env.development.local
@@ -11,6 +11,12 @@ server/node_modules/
 .env.production.local
 client/.env
 server/.env
+
+# Template files — safe to commit (no real values inside)
+!.env.example
+!client/.env.example
+!server/.env.example
+
 
 # Production build outputs
 dist/

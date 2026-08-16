@@ -41,6 +41,7 @@ app.use('/api/services', require('./routes/serviceRoutes'));
 app.use('/api/gallery', require('./routes/galleryRoutes'));
 app.use('/api/testimonials', require('./routes/testimonialRoutes'));
 app.use('/api/inquiries', require('./routes/inquiryRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
 
 // Base health check route in Gujarati
 app.get('/api/health', (req, res) => {

@@ -1,24 +1,33 @@
 const Admin = require('../models/Admin');
 const jwt = require('jsonwebtoken');
 
-// Seed default admin if none exists
+// Fail loudly if required env vars are missing
+const REQUIRED_ENV = ['ADMIN_USERNAME', 'ADMIN_PASSWORD', 'JWT_SECRET'];
+REQUIRED_ENV.forEach((key) => {
+  if (!process.env[key]) {
+    console.error(`\n❌ FATAL: Environment variable "${key}" is not set. Add it to server/.env and restart.\n`);
+  }
+});
+
+// Seed default admin from .env — only runs if no admin exists yet
 exports.seedDefaultAdmin = async () => {
   try {
     const adminCount = await Admin.countDocuments();
     if (adminCount === 0) {
-      const defaultUsername = 'admin';
-      const defaultPassword = 'adminpassword123';
-      
-      const newAdmin = new Admin({
-        username: defaultUsername,
-        password: defaultPassword
-      });
+      const defaultUsername = process.env.ADMIN_USERNAME;
+      const defaultPassword = process.env.ADMIN_PASSWORD;
+
+      if (!defaultUsername || !defaultPassword) {
+        console.error('❌ Cannot seed admin: ADMIN_USERNAME or ADMIN_PASSWORD is not set in server/.env');
+        return;
+      }
+
+      const newAdmin = new Admin({ username: defaultUsername, password: defaultPassword });
       await newAdmin.save();
       console.log('--------------------------------------------------');
-      console.log('Seeded default admin account:');
-      console.log(`Username: ${defaultUsername}`);
-      console.log(`Password: ${defaultPassword}`);
-      console.log('Please change this password in production!');
+      console.log('✅ Default admin account created from .env');
+      console.log(`   Username: ${defaultUsername}`);
+      console.log('   Password: (set in server/.env — not shown)');
       console.log('--------------------------------------------------');
     }
   } catch (error) {
@@ -28,7 +37,7 @@ exports.seedDefaultAdmin = async () => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
-  
+
   try {
     if (!username || !password) {
       return res.status(400).json({ message: 'Username and password are required' });
@@ -44,21 +53,51 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ message: 'Server misconfiguration: JWT_SECRET not set' });
+    }
+
     const token = jwt.sign(
       { id: admin._id, username: admin.username },
-      process.env.JWT_SECRET || 'super_secret_shree_mahendi_key_12345',
+      process.env.JWT_SECRET,
       { expiresIn: '30d' }
     );
 
     res.json({
       status: 'success',
       token,
-      admin: {
-        id: admin._id,
-        username: admin.username
-      }
+      admin: { id: admin._id, username: admin.username }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error during login', error: error.message });
   }
 };
+
+exports.updateCredentials = async (req, res) => {
+  const { username, password } = req.body;
+  const adminId = req.admin.id;
+
+  try {
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    admin.username = username;
+    admin.password = password;
+    await admin.save();
+
+    res.json({
+      status: 'success',
+      message: 'Credentials updated successfully',
+      admin: { id: admin._id, username: admin.username }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating credentials', error: error.message });
+  }
+};
+

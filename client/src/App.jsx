@@ -18,12 +18,15 @@ import ManageCategories from './pages/admin/ManageCategories';
 import ManageServices from './pages/admin/ManageServices';
 import ManageTestimonials from './pages/admin/ManageTestimonials';
 import Inquiries from './pages/admin/Inquiries';
+import Settings from './pages/admin/Settings';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
+const adminPath = import.meta.env.VITE_ADMIN_PATH || '/admin';
+
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith(adminPath);
   const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
@@ -47,9 +50,9 @@ function AppContent() {
           <Route path="/testimonials" element={<Navigate to="/#testimonials" replace />} />
           <Route path="/contact" element={<Navigate to="/#contact" replace />} />
           
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          {/* Admin Routes — dynamic path from VITE_ADMIN_PATH */}
+          <Route path={`${adminPath}/login`} element={<Login />} />
+          <Route path={adminPath} element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="gallery" element={<ManageGallery />} />
@@ -57,7 +60,11 @@ function AppContent() {
             <Route path="services" element={<ManageServices />} />
             <Route path="testimonials" element={<ManageTestimonials />} />
             <Route path="inquiries" element={<Inquiries />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
+
+          {/* Legacy /admin redirect to new secure path */}
+          <Route path="/admin/*" element={<Navigate to={adminPath} replace />} />
         </Routes>
       </main>
 
