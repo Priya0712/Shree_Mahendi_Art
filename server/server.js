@@ -23,7 +23,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     const normalizedOrigin = origin.replace(/\/$/, '');
     if (allowedOrigins.includes(normalizedOrigin) || process.env.NODE_ENV === 'development') {
@@ -37,17 +36,25 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/services', require('./routes/serviceRoutes'));
-app.use('/api/gallery', require('./routes/galleryRoutes'));
-app.use('/api/testimonials', require('./routes/testimonialRoutes'));
-app.use('/api/inquiries', require('./routes/inquiryRoutes'));
-app.use('/api/settings', require('./routes/settingsRoutes'));
+// Routes — Support both /api/* and root /* paths so no request ever 404s
+const authRoutes = require('./routes/authRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
+const galleryRoutes = require('./routes/galleryRoutes');
+const testimonialRoutes = require('./routes/testimonialRoutes');
+const inquiryRoutes = require('./routes/inquiryRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
 
-// Base health check route in Gujarati
-app.get('/api/health', (req, res) => {
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/categories', '/categories'], categoryRoutes);
+app.use(['/api/services', '/services'], serviceRoutes);
+app.use(['/api/gallery', '/gallery'], galleryRoutes);
+app.use(['/api/testimonials', '/testimonials'], testimonialRoutes);
+app.use(['/api/inquiries', '/inquiries'], inquiryRoutes);
+app.use(['/api/settings', '/settings'], settingsRoutes);
+
+// Base health check route
+app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'શ્રી મહેંદી બેકએન્ડ સર્વર સફળતાપૂર્વક ચાલુ છે.',

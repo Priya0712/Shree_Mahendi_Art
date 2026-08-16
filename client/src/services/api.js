@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://shree-mahendi-art.onrender.com/api';
+// Always normalize base URL without trailing slash
+let API_BASE = import.meta.env.VITE_API_URL || 'https://shree-mahendi-art.onrender.com/api';
+API_BASE = API_BASE.replace(/\/+$/, '');
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE,
 });
 
 api.interceptors.request.use((config) => {
@@ -15,7 +17,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // DO NOT redirect to login if the 401 was from the login endpoint itself!
     const isLoginEndpoint = err.config?.url?.includes('/auth/login');
     if (err.response?.status === 401 && !isLoginEndpoint) {
       localStorage.removeItem('adminToken');
