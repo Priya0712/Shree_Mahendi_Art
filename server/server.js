@@ -7,7 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to Database
-connectDB();
+connectDB().then(() => {
+  const { seedDefaultAdmin } = require('./controllers/authController');
+  seedDefaultAdmin();
+});
 
 // Middleware
 const allowedOrigins = [
@@ -32,7 +35,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api', require('./routes/api'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/services', require('./routes/serviceRoutes'));
+app.use('/api/gallery', require('./routes/galleryRoutes'));
+app.use('/api/testimonials', require('./routes/testimonialRoutes'));
+app.use('/api/inquiries', require('./routes/inquiryRoutes'));
 
 // Base health check route in Gujarati
 app.get('/api/health', (req, res) => {
