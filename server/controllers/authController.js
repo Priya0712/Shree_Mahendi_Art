@@ -9,29 +9,47 @@ REQUIRED_ENV.forEach((key) => {
   }
 });
 
-// Seed default admin from .env — only runs if no admin exists yet
+// Seed or sync admin credentials from env on server start
 exports.seedDefaultAdmin = async () => {
   try {
-    const adminCount = await Admin.countDocuments();
-    if (adminCount === 0) {
-      const defaultUsername = process.env.ADMIN_USERNAME;
-      const defaultPassword = process.env.ADMIN_PASSWORD;
+    const defaultUsername = process.env.ADMIN_USERNAME;
+    const defaultPassword = process.env.ADMIN_PASSWORD;
 
-      if (!defaultUsername || !defaultPassword) {
-        console.error('❌ Cannot seed admin: ADMIN_USERNAME or ADMIN_PASSWORD is not set in server/.env');
-        return;
-      }
+    if (!defaultUsername || !defaultPassword) {
+      console.error('❌ Cannot seed/sync admin: ADMIN_USERNAME or ADMIN_PASSWORD is not set in environment');
+      return;
+    }
 
-      const newAdmin = new Admin({ username: defaultUsername, password: defaultPassword });
-      await newAdmin.save();
+    let admin = await Admin.findOne();
+    if (!admin) {
+      admin = new Admin({ username: defaultUsername, password: defaultPassword });
+      await admin.save();
       console.log('--------------------------------------------------');
-      console.log('✅ Default admin account created from .env');
+      console.log('✅ Default admin account created from environment');
       console.log(`   Username: ${defaultUsername}`);
-      console.log('   Password: (set in server/.env — not shown)');
       console.log('--------------------------------------------------');
+    } else {
+      // Sync credentials with env if changed
+      let modified = false;
+      if (admin.username !== defaultUsername) {
+        admin.username = defaultUsername;
+        modified = true;
+      }
+      const isPassMatch = await admin.comparePassword(defaultPassword);
+      if (!isPassMatch) {
+        admin.password = defaultPassword; // Pre-save hook will hash it
+        modified = true;
+      }
+      if (modified) {
+        await admin.save();
+        console.log('--------------------------------------------------');
+        console.log('🔄 Admin credentials updated to match environment');
+        console.log(`   Username: ${defaultUsername}`);
+        console.log('--------------------------------------------------');
+      }
     }
   } catch (error) {
-    console.error('Failed to seed default admin:', error.message);
+    console.error('Failed to seed/sync admin:', error.message);
   }
 };
 
