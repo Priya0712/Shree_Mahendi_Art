@@ -12,12 +12,13 @@ const STATIC_CONES = [
     img: '/images/cones-shalimar.jpg',
     title: 'Shalimar Mahendi Cones',
     subtitle: 'Colored Pack — Premium Quality',
+    objectPos: 'object-center',
   },
   {
     img: '/images/cones-natural.jpg',
     title: 'Natural Mehendi Cones',
     subtitle: 'Handmade — Pure Henna — No Chemicals',
-    objectPos: 'object-top',
+    objectPos: 'object-[center_35%]',
   },
 ];
 
@@ -37,7 +38,7 @@ const ConesSection = ({ cones = [] }) => (
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         {STATIC_CONES.map(({ img, title, subtitle, objectPos = 'object-center' }) => (
           <div key={title} className="rounded-3xl overflow-hidden shadow-md border border-[#D4AF37]/20 group">
-            <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+            <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
               <img
                 src={img}
                 alt={title}
