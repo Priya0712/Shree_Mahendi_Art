@@ -24,7 +24,7 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
   };
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-10 md:py-16">
+    <section className="max-w-2xl mx-auto px-4 py-10 md:py-12">
       <div className="text-center mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-[#6B2E1F]">પરિવર્તન જુઓ</h2>
         <p className="text-[#4A2E22] text-sm mt-2">
@@ -35,7 +35,7 @@ const BeforeAfterSlider = ({ mehendiImg, plainImg }) => {
       <div
         ref={containerRef}
         className="relative w-full rounded-3xl overflow-hidden select-none touch-none shadow-xl cursor-ew-resize"
-        style={{ aspectRatio: '4 / 5' }}
+        style={{ aspectRatio: '16 / 9' }}
         onMouseDown={() => { isDragging.current = true; }}
         onMouseUp={() => { isDragging.current = false; }}
         onMouseLeave={() => { isDragging.current = false; }}
