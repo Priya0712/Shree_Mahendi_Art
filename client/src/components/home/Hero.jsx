@@ -13,14 +13,14 @@ const Hero = () => (
           <span className="text-[#C1662F]">સુંદર મહેંદી</span> થી શણગારો
         </h1>
         <p className="text-[#4A2E22] text-base sm:text-lg mb-6 max-w-lg mx-auto md:mx-0">
-          બ્રાઇડલ મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક — બધું એક જ જગ્યાએ, અનુભવી હાથે.
+          બ્રાઇડલ મહેંદી, દરેક પ્રકારની મહેંદી, નેઇલ આર્ટ, વેક્સિંગ અને ખાટલી વર્ક — બધું એક જ જગ્યાએ, અનુભવી હાથે.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-          <a href="https://wa.me/918799008221" target="_blank" rel="noreferrer"
+          <a href="#contact"
             className="bg-[#6B2E1F] text-white px-6 py-3 rounded-full font-semibold text-center active:scale-95 transition">
             હમણાં બુક કરો
           </a>
-          <a href="/gallery"
+          <a href="#gallery"
             className="border-2 border-[#6B2E1F] text-[#6B2E1F] px-6 py-3 rounded-full font-semibold text-center active:scale-95 transition">
             ડિઝાઈન જુઓ
           </a>
