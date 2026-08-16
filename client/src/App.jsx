@@ -5,6 +5,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import WhatsAppFloat from './components/common/WhatsAppFloat';
 import { AuthProvider } from './context/AuthContext';
+import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import SplashScreen from './components/common/SplashScreen';
 
 // Public Pages
@@ -37,6 +38,7 @@ function AppContent() {
   if (!appReady) return <SplashScreen />;
 
   return (
+    <SiteSettingsProvider>
     <div className="flex flex-col min-h-screen">
       {!isAdminRoute && <Navbar />}
       
@@ -71,6 +73,7 @@ function AppContent() {
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <WhatsAppFloat />}
     </div>
+    </SiteSettingsProvider>
   );
 }
 

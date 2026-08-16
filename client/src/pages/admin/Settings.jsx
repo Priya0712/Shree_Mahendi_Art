@@ -138,30 +138,39 @@ const Settings = () => {
         {/* Left panel */}
         <div className="lg:col-span-2 space-y-6">
 
-          {/* ── Slider Image Upload ── */}
-          <div className="bg-white rounded-3xl p-6 border border-[#D4AF37]/15 shadow-sm space-y-5">
+          {/* ── All Site Images ── */}
+          <div className="bg-white rounded-3xl p-6 border border-[#D4AF37]/15 shadow-sm space-y-6">
             <div className="border-b border-gray-100 pb-3 flex items-center gap-2">
               <ImageIcon size={18} className="text-[#D4AF37]" />
-              <h2 className="font-extrabold text-[#6B2E1F] text-lg">સ્લાઇડર ફોટા બદલો</h2>
+              <h2 className="font-extrabold text-[#6B2E1F] text-lg">વેબસાઇટ ફોટા (Site Images)</h2>
             </div>
-            <p className="text-xs text-[#8B6F5E]">
-              ફોટા ઉપર ક્લિક કરીને નવો ફોટો અપલોડ કરો — Cloudinary પર auto-save થઈ જશે.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <ImageUploadCard
-                label="🌿 મહેંદી ફોટો (ડાબી બાજુ)"
-                hint="Portrait ફોટો best દેખાય છે (mehendi on hands)"
-                currentUrl={settings.mehendiImage}
-                field="mehendiImage"
-                onUploaded={handleImageUploaded}
-              />
-              <ImageUploadCard
-                label="✋ ખાલી હાથ ફોટો (જમણી બાજુ)"
-                hint="Plain hand without mehendi"
-                currentUrl={settings.plainImage}
-                field="plainImage"
-                onUploaded={handleImageUploaded}
-              />
+            <p className="text-xs text-[#8B6F5E]">ફોટા ઉપર ક્લિક કરીને નવો ફોટો અપલોડ કરો — Cloudinary પર auto-save થઈ જશે.</p>
+
+            {/* Row 1: Hero + Owner Portrait */}
+            <div>
+              <p className="text-[10px] font-bold text-[#8B6F5E] uppercase tracking-widest mb-3">📄 Page Images</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <ImageUploadCard label="🏠 Hero Image (Home Page)" hint="Landscape photo — bridal mehendi hands" currentUrl={settings.heroImage} field="heroImage" onUploaded={handleImageUploaded} />
+                <ImageUploadCard label="👤 Owner Portrait (About Page)" hint="Portrait photo of the artist" currentUrl={settings.ownerPortrait} field="ownerPortrait" onUploaded={handleImageUploaded} />
+              </div>
+            </div>
+
+            {/* Row 2: Before/After Slider */}
+            <div>
+              <p className="text-[10px] font-bold text-[#8B6F5E] uppercase tracking-widest mb-3">🔄 Before/After Slider</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <ImageUploadCard label="🌿 Mehendi Photo (Left)" hint="Portrait — both hands with bridal mehendi" currentUrl={settings.mehendiImage} field="mehendiImage" onUploaded={handleImageUploaded} />
+                <ImageUploadCard label="✋ Plain Hand Photo (Right)" hint="Plain hand without mehendi" currentUrl={settings.plainImage} field="plainImage" onUploaded={handleImageUploaded} />
+              </div>
+            </div>
+
+            {/* Row 3: Cone Photos */}
+            <div>
+              <p className="text-[10px] font-bold text-[#8B6F5E] uppercase tracking-widest mb-3">🌿 Mehendi Cones Photos (Services Page)</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <ImageUploadCard label="Shalimar Cones (Colored Pack)" hint="Shalimar brand mehendi cone photo" currentUrl={settings.coneShalimar} field="coneShalimar" onUploaded={handleImageUploaded} />
+                <ImageUploadCard label="Natural Cones (Handmade)" hint="Natural henna cones — no chemicals" currentUrl={settings.coneNatural} field="coneNatural" onUploaded={handleImageUploaded} />
+              </div>
             </div>
           </div>
 

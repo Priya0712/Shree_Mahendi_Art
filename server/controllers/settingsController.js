@@ -22,7 +22,8 @@ exports.updateSettings = async (req, res) => {
     const fields = [
       'ownerName', 'whatsappNumber', 'instagramUrl', 'siteTitle', 'seoDescription',
       'stat1Title', 'stat1Desc', 'stat2Title', 'stat2Desc', 'stat3Title', 'stat3Desc',
-      'beforeImage', 'afterImage', 'mehendiImage', 'plainImage'
+      'beforeImage', 'afterImage', 'mehendiImage', 'plainImage',
+      'coneShalimar', 'coneNatural', 'heroImage', 'ownerPortrait'
     ];
 
     fields.forEach(f => {
@@ -43,8 +44,9 @@ exports.uploadSliderImage = async (req, res) => {
     if (!imageData || !field) {
       return res.status(400).json({ message: 'imageData and field are required' });
     }
-    if (!['mehendiImage', 'plainImage'].includes(field)) {
-      return res.status(400).json({ message: 'field must be mehendiImage or plainImage' });
+    const ALLOWED = ['mehendiImage', 'plainImage', 'coneShalimar', 'coneNatural', 'heroImage', 'ownerPortrait'];
+    if (!ALLOWED.includes(field)) {
+      return res.status(400).json({ message: `field must be one of: ${ALLOWED.join(', ')}` });
     }
 
     const result = await cloudinary.uploader.upload(imageData, {

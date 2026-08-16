@@ -1,4 +1,5 @@
 import { optimizedUrl } from '../../utils/cloudinaryUrl';
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 
 const WhatsAppIcon = ({ size = 16 }) => (
   <svg viewBox="0 0 448 512" width={size} height={size} fill="currentColor">
@@ -6,86 +7,83 @@ const WhatsAppIcon = ({ size = 16 }) => (
   </svg>
 );
 
-/* Real cone photos always shown — static assets from your own photos */
-const STATIC_CONES = [
-  {
-    img: '/images/cones-shalimar.jpg',
-    title: 'Shalimar Mahendi Cones',
-    subtitle: 'Colored Pack — Premium Quality',
-    objectPos: 'object-center',
-  },
-  {
-    img: '/images/cones-natural.jpg',
-    title: 'Natural Mehendi Cones',
-    subtitle: 'Handmade — Pure Henna — No Chemicals',
-    objectPos: 'object-[center_35%]',
-  },
-];
+/* Cone photos — URLs managed from Admin Panel → Settings */
+const ConesSection = ({ cones = [] }) => {
+  const { coneShalimar, coneNatural } = useSiteSettings();
 
-const ConesSection = ({ cones = [] }) => (
-  <section className="bg-[#FFF3E0] py-10 mt-6">
-    <div className="max-w-6xl mx-auto px-4">
+  const conePhotos = [
+    {
+      img: coneShalimar || '/images/cones-shalimar.jpg',
+      title: 'Shalimar Mahendi Cones',
+      subtitle: 'Colored Pack — Premium Quality',
+      objectPos: 'object-center',
+    },
+    {
+      img: coneNatural || '/images/cones-natural.jpg',
+      title: 'Natural Mehendi Cones',
+      subtitle: 'Handmade — Pure Henna — No Chemicals',
+      objectPos: 'object-[center_35%]',
+    },
+  ];
 
-      {/* Heading */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#6B2E1F] inline-block border-b-2 border-[#D4AF37] pb-1">
-          🌿 અમારા મહેંદી કોન્સ
-        </h2>
-        <p className="text-[#4A2E22] text-sm mt-2">100% Natural — No Chemicals — Best Quality</p>
-      </div>
+  return (
+    <section className="bg-[#FFF3E0] py-10 mt-6">
+      <div className="max-w-6xl mx-auto px-4">
 
-      {/* Static photos from your real cones */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-        {STATIC_CONES.map(({ img, title, subtitle, objectPos = 'object-center' }) => (
-          <div key={title} className="rounded-3xl overflow-hidden shadow-md border border-[#D4AF37]/20 group">
-            <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
-              <img
-                src={img}
-                alt={title}
-                className={`w-full h-full object-cover ${objectPos} group-hover:scale-105 transition duration-500`}
-                loading="lazy"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#6B2E1F]/85 to-transparent px-4 py-4">
-                <p className="text-white text-sm font-bold">{title}</p>
-                <p className="text-[#D4AF37] text-xs mt-0.5">{subtitle}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+        {/* Heading */}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#6B2E1F] inline-block border-b-2 border-[#D4AF37] pb-1">
+            🌿 અમારા મહેંદી કોન્સ
+          </h2>
+          <p className="text-[#4A2E22] text-sm mt-2">100% Natural — No Chemicals — Best Quality</p>
+        </div>
 
-      {/* DB-driven cones (from admin panel) — shown if any exist */}
-      {cones.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          {cones.map((c) => (
-            <div key={c._id} className="bg-white rounded-2xl p-3 shadow-sm text-center">
-              {c.image?.url && (
+        {/* Cone photos — dynamic from admin settings */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+          {conePhotos.map(({ img, title, subtitle, objectPos }) => (
+            <div key={title} className="rounded-3xl overflow-hidden shadow-md border border-[#D4AF37]/20 group">
+              <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
                 <img
-                  src={optimizedUrl(c.image.url, 300)}
-                  alt={c.titleGujarati}
-                  className="w-full h-24 object-cover rounded-xl mb-2"
+                  src={img}
+                  alt={title}
+                  className={`w-full h-full object-cover ${objectPos} group-hover:scale-105 transition duration-500`}
                   loading="lazy"
                 />
-              )}
-              <p className="text-sm font-medium text-[#2B1810]">{c.titleGujarati}</p>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#6B2E1F]/85 to-transparent px-4 py-4">
+                  <p className="text-white text-sm font-bold">{title}</p>
+                  <p className="text-[#D4AF37] text-xs mt-0.5">{subtitle}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      )}
 
-      {/* WhatsApp CTA */}
-      <div className="text-center">
-        <a
-          href="https://wa.me/918799008221?text=નમસ્તે,%20મારે%20મહેંદી%20કોન%20ઓર્ડર%20કરવા%20છે"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white px-6 py-3 rounded-full font-semibold text-sm transition active:scale-95 shadow-md"
-        >
-          <WhatsAppIcon size={18} /> ઓર્ડર માટે WhatsApp કરો
-        </a>
+        {/* DB-driven cones from admin panel (if any added) */}
+        {cones.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            {cones.map((c) => (
+              <div key={c._id} className="bg-white rounded-2xl p-3 shadow-sm text-center">
+                {c.image?.url && (
+                  <img src={optimizedUrl(c.image.url, 300)} alt={c.titleGujarati}
+                    className="w-full h-24 object-cover rounded-xl mb-2" loading="lazy" />
+                )}
+                <p className="text-sm font-medium text-[#2B1810]">{c.titleGujarati}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* WhatsApp CTA */}
+        <div className="text-center">
+          <a href="https://wa.me/918799008221?text=નમસ્તે,%20મારે%20મહેંદી%20કોન%20ઓર્ડર%20કરવા%20છે"
+            target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white px-6 py-3 rounded-full font-semibold text-sm transition active:scale-95 shadow-md">
+            <WhatsAppIcon size={18} /> ઓર્ડર માટે WhatsApp કરો
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ConesSection;

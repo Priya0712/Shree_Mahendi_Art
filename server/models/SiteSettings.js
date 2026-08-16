@@ -19,6 +19,14 @@ const siteSettingsSchema = new mongoose.Schema({
   mehendiImage: { type: String, default: '/images/mehendi-both-hands.jpg' },
   plainImage:   { type: String, default: '/images/before-plain-hand.jpg'  },
 
+  // Mehendi Cone Photos
+  coneShalimar: { type: String, default: '/images/cones-shalimar.jpg' },
+  coneNatural:  { type: String, default: '/images/cones-natural.jpg'  },
+
+  // Page Images
+  heroImage:     { type: String, default: '/images/hero-bridal-mehendi.jpg' },
+  ownerPortrait: { type: String, default: '/images/owner-portrait.jpg' },
+
   // Legacy aliases kept for backward compatibility
   beforeImage: { type: String, default: '/images/before-plain-hand.jpg' },
   afterImage:  { type: String, default: '/images/mehendi-both-hands.jpg' },
