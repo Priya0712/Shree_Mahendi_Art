@@ -24,21 +24,30 @@ const Dashboard = () => {
   }, []);
 
   const cards = [
-    { label: 'Gallery Images', value: stats.gallery, icon: Image, color: 'bg-amber-100 text-amber-700' },
-    { label: 'Active Services', value: stats.services, icon: Sparkles, color: 'bg-rose-100 text-rose-700' },
-    { label: 'New Inquiries', value: stats.newInquiries, icon: Inbox, color: 'bg-green-100 text-green-700' },
+    { label: 'ગેલેરી ઈમેજીસ (Gallery)', value: stats.gallery, icon: Image, textColor: 'text-[#D4AF37]', bgColor: 'bg-[#FFFBF2]', borderColor: 'border-[#D4AF37]/25' },
+    { label: 'સેવાઓ (Active Services)', value: stats.services, icon: Sparkles, textColor: 'text-[#6B2E1F]', bgColor: 'bg-[#FFF3E0]', borderColor: 'border-[#6B2E1F]/20' },
+    { label: 'નવી ઇન્ક્વાયરીઝ (New)', value: stats.newInquiries, icon: Inbox, textColor: 'text-[#C1662F]', bgColor: 'bg-[#FFF8F0]', borderColor: 'border-[#C1662F]/20' },
   ];
 
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-4">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {cards.map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className={`rounded-2xl p-5 flex items-center gap-4 ${color}`}>
-            <Icon size={28} />
+    <div className="font-sans">
+      <div className="mb-6">
+        <h1 className="text-2xl font-extrabold text-[#6B2E1F] tracking-wide">ડેશબોર્ડ (Dashboard)</h1>
+        <p className="text-xs text-[#8B6F5E] mt-1 font-semibold uppercase tracking-wider">Overview of Shree Mahendi Art platform statistics</p>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {cards.map(({ label, value, icon: Icon, textColor, bgColor, borderColor }) => (
+          <div 
+            key={label} 
+            className={`rounded-3xl p-6 flex items-center gap-5 bg-white border ${borderColor} shadow-sm transition duration-300 hover:shadow-md`}
+          >
+            <div className={`p-4 rounded-2xl ${bgColor} ${textColor}`}>
+              <Icon size={26} />
+            </div>
             <div>
-              <p className="text-2xl font-bold">{value}</p>
-              <p className="text-sm">{label}</p>
+              <p className="text-3xl font-black text-[#2B1810] leading-none">{value}</p>
+              <p className="text-xs text-[#8B6F5E] font-bold mt-2 uppercase tracking-wide">{label}</p>
             </div>
           </div>
         ))}
